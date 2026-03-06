@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -24,6 +25,7 @@ Route::middleware([
 
             Route::get('/me', [AuthController::class, 'me']);
 
+            Route::post("/users", [UserController::class, "createUser"]);
         });
 
     });
