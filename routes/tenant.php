@@ -25,7 +25,8 @@ Route::middleware([
 
             Route::get('/me', [AuthController::class, 'me']);
 
-            Route::post("/users", [UserController::class, "createUser"]);
+            Route::post("/users", [UserController::class, "createUser"])
+                ->middleware("permission:edit_users");
         });
 
     });
