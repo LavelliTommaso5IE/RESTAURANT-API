@@ -14,19 +14,51 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])
-    ->prefix('api')
-    ->group(function () {
+->prefix('api')
+->group(function () {
 
-        // Rotta Pubblica
-        Route::post('/login', [AuthController::class, 'login']);
+    // --- ROTTE PUBBLICHE ---
+    Route::post('/login', [AuthController::class, 'login']);
 
-        // Rotta Privata: Usiamo la classe direttamente invece della stringa 'jwt'!
-        Route::middleware([JwtMiddleware::class])->group(function () {
+    // --- ROTTE PRIVATE (Protette da JWT) ---
+    Route::middleware([JwtMiddleware::class])->group(function () {
 
-            Route::get('/me', [AuthController::class, 'me']);
+        Route::get('/me', [AuthController::class, 'me']);
 
-            Route::post("/users", [UserController::class, "createUser"])
-                ->middleware("permission:edit_users");
+        // GESTIONE UTENTI (Raggruppate per Controller e Prefisso)
+        Route::controller(UserController::class)
+            ->prefix('users')
+            ->group(function () {
+                
+                // Lista tutti gli utenti
+                Route::get("/", "index")
+                    ->middleware("permission:edit_users"); // Magari crei un permesso a parte per vederli
+
+                // Crea un nuovo utente
+                Route::post("/", "createUser")
+                    ->middleware("permission:edit_users");
+
+                // Aggiorna un utente esistente (Nota il plurale /users/{id})
+                Route::put("/{id}", "updateUser")
+                    ->middleware("permission:edit_users");
+
+                // Elimina un utente
+                Route::delete("/{id}", "deleteUser")
+                    ->middleware("permission:edit_users");
+            });
+
+        // GESTIONE RUOLI (Pronta per il futuro RoleController)
+        // Route::controller(RoleController::class)->prefix('roles')->group(function () {
+        Route::prefix('roles')->group(function () {
+            
+            Route::get("/", function() {
+                return response()->json(["message" => "Lista ruoli in creazione"], 200);
+            });
+
+            Route::post("/", function() {
+                return response()->json(["message" => "Creazione ruolo in corso"], 200);
+            });
+
         });
-
     });
+});
