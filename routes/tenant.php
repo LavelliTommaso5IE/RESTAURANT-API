@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Middleware\JwtMiddleware;
 
 Route::middleware([
@@ -32,7 +33,7 @@ Route::middleware([
                 
                 // Lista tutti gli utenti
                 Route::get("/", "index")
-                    ->middleware("permission:edit_users"); // Magari crei un permesso a parte per vederli
+                    ->middleware("permission:view_users");
 
                 // Crea un nuovo utente
                 Route::post("/", "createUser")
@@ -45,6 +46,23 @@ Route::middleware([
                 // Elimina un utente
                 Route::delete("/{id}", "deleteUser")
                     ->middleware("permission:edit_users");
+            });
+
+        Route::controller(RoleController::class)
+            ->prefix('roles')
+            ->group(function () {
+                
+                Route::get("/", "index")
+                    ->middleware("permission:view_roles");
+
+                Route::post("/", "create")
+                    ->middleware("permission:edit_roles");
+
+                Route::put("/{id}", "update")
+                    ->middleware("permission:edit_roles");
+
+                Route::delete("/{id}", "delete")
+                    ->middleware("permission:edit_roles");
             });
 
         // GESTIONE RUOLI (Pronta per il futuro RoleController)

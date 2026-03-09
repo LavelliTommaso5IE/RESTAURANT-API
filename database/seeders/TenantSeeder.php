@@ -10,16 +10,27 @@ class TenantSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. CREIAMO I PERMESSI BASE
-        $permessoScrittura = Permission::create([
-            'name' => 'edit_users',
-            'description' => 'Permette di modificare gli utenti'
-        ]);
+        // 1. DEFINIAMO TUTTI I PERMESSI IN UN ARRAY PULITO
+        $permissionsData = [
+            // Utenti
+            ['name' => 'view_users', 'description' => 'Permette di vedere la lista degli utenti'],
+            ['name' => 'edit_users', 'description' => 'Permette di creare, modificare ed eliminare utenti'],
+            
+            // Ruoli
+            ['name' => 'view_roles', 'description' => 'Permette di vedere la lista dei ruoli'],
+            ['name' => 'edit_roles', 'description' => 'Permette di creare, modificare ed eliminare ruoli'],
+            
+            // Altro
+            ['name' => 'view_reports', 'description' => 'Permette di vedere i report aziendali'],
+        ];
 
-        $permessoLettura = Permission::create([
-            'name' => 'view_reports',
-            'description' => 'Permette di vedere i report'
-        ]);
+        $adminPermissionIds = [];
+
+        // Creiamo i permessi nel DB e salviamo i loro ID per l'Admin
+        foreach ($permissionsData as $data) {
+            $permission = Permission::create($data);
+            $adminPermissionIds[] = $permission->id; // Raccogliamo tutti gli ID
+        }
 
         // 2. CREIAMO I RUOLI
         $adminRole = Role::create([
@@ -32,9 +43,13 @@ class TenantSeeder extends Seeder
             'description' => 'Utente standard con permessi limitati'
         ]);
 
-        // 3. AGGANCIAMO I PERMESSI AI RUOLI (Tabella Pivot)
-        // L'admin prende tutto, lo user solo lettura
-        $adminRole->permissions()->attach([$permessoScrittura->id, $permessoLettura->id]);
-        $userRole->permissions()->attach([$permessoLettura->id]);
+        // 3. AGGANCIAMO I PERMESSI AI RUOLI
+        
+        // L'admin prende TUTTI i permessi (l'array pieno di ID che abbiamo raccolto prima)
+        $adminRole->permissions()->attach($adminPermissionIds);
+
+        // Lo user normale prende solo i permessi di LETTURA
+        $userPermissions = Permission::whereIn('name', ['view_users', 'view_reports'])->pluck('id');
+        $userRole->permissions()->attach($userPermissions);
     }
 }
