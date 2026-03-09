@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id(); // id PK
-            $table->string('nome');
-            $table->string('cognome');
+            $table->string('name');
+            $table->string('surname');
             $table->string('email')->unique();
             $table->string('password'); // Questo è il tuo password_hash
             $table->string('stato')->default('attivo'); // es. attivo, disattivato

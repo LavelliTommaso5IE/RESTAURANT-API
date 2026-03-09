@@ -40,11 +40,11 @@ Route::middleware([
                     ->middleware("permission:edit_users");
 
                 // Aggiorna un utente esistente (Nota il plurale /users/{id})
-                Route::put("/{id}", "updateUser")
+                Route::put("/{user}", "updateUser")
                     ->middleware("permission:edit_users");
 
                 // Elimina un utente
-                Route::delete("/{id}", "deleteUser")
+                Route::delete("/{user}", "deleteUser")
                     ->middleware("permission:edit_users");
         });
 

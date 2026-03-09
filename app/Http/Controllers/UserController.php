@@ -30,20 +30,12 @@ class UserController extends Controller
             // Prendiamo l'oggetto ruolo "user" per estrarne poi l'ID
             $userRole = Role::where("name", "=", "user")->first();
 
-            $userData = [
-                "nome" => $request->name,       // Controlla che nel DB non si chiami 'nome'
-                "cognome" => $request->surname, // Controlla che nel DB non si chiami 'cognome'
-                "email" => $request->email,
-                "password" => Hash::make($request->password), // AGGIUNTO HASH
-                "stato" => "temp",
-                "role_id" => $userRole->id // Estraggo l'ID
-            ];
+            $userData = $request->validated();
+            $userData["role_id"] = $userRole->id;
 
             // SALVO IL NUOVO UTENTE IN UNA VARIABILE
             $newUser = User::create($userData);
-
-            $userCreato = User::find($newUser->id);
-            $userCreato->load("role");
+            $newUser->load("role");
             
         } catch (Exception $e) {
             return response()->json([ // AGGIUNTO IL RETURN
@@ -54,38 +46,15 @@ class UserController extends Controller
 
         return response()->json([ // AGGIUNTO IL RETURN
             "message" => "Utente creato con successo",
-            "user" => new UserResource($userCreato) // PASSO IL NUOVO UTENTE
+            "user" => new UserResource($newUser) // PASSO IL NUOVO UTENTE
         ], 201);
     }
 
-    public function updateUser(UpdateUserRequest $request, $id)
+    public function updateUser(UpdateUserRequest $request, User $user)
     {
         try {
-            $user = User::findOrFail($id);
-
-            // Se l'email è presente nella richiesta, la valido e la aggiorno
-            if ($request->has('email')) {
-                $user->email = $request->email;
-            }
-            IF($request->has('password')) {
-                $user->password = Hash::make($request->password); // AGGIUNTO HASH
-            }
-            // Aggiorno gli altri campi se presenti
-            if ($request->has('name')) {
-                $user->nome = $request->name; // Controlla che nel DB non si chiami 'nome'
-            }
-            if ($request->has('surname')) {
-                $user->cognome = $request->surname; // Controlla che nel DB non si chiami 'cognome'
-            }
-            if ($request->has('role_id')) {
-                $user->role_id = $request->role_id;
-            }
-            if ($request->has('stato')) {
-                $user->stato = $request->stato;
-            }
-
-            $user->save();
-
+            $updateData = $request->validated();
+            $user->update($updateData);
         } catch (Exception $e) {
             return response()->json([
                 "message" => "Impossibile aggiornare l'utente",
@@ -101,10 +70,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function deleteUser(Request $request, $id)
+    public function deleteUser(Request $request, User $user)
     {
         try {
-            $user = User::findOrFail($id);
             $user->delete();
         } catch (Exception $e) {
             return response()->json([

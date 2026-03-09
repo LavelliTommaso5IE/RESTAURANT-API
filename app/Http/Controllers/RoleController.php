@@ -28,12 +28,7 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $roleData = [
-            "name" => $request->name,
-            "description" => $request->description
-        ];
-
-        $newRole = Role::create($roleData);
+        $newRole = Role::create($request->validated());
 
         // 2. Carichiamo la relazione sul ruolo appena creato
         $newRole->load('permissions');

@@ -7,8 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     protected $fillable = [
-        'nome',
-        'cognome',
+        'name',
+        'surname',
         'email',
         'password',
         'stato',
@@ -18,6 +18,10 @@ class User extends Authenticatable
     // Nascondiamo la password quando l'utente viene trasformato in Array/JSON!
     protected $hidden = [
         'password',
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
     ];
 
     // Un utente appartiene a UN ruolo

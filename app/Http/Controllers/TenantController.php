@@ -55,8 +55,8 @@ class TenantController extends Controller
 
                 // Creiamo l'utente
                 $user = User::create([
-                    'nome' => $request->admin_name,
-                    'cognome' => $request->admin_surname,
+                    'name' => $request->admin_name,
+                    'surname' => $request->admin_surname,
                     'email' => $request->admin_email,
                     'password' => bcrypt($request->admin_password),
                     'stato' => 'attivo',
