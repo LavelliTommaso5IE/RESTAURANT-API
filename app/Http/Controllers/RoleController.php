@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Resources\PermissionRoleResource;
+use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
 {
@@ -12,23 +14,34 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // 1. Usiamo with() per caricare i permessi di TUTTI i ruoli con una singola query
+        $roles = Role::with('permissions')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json([
+            "message" => "Lista ruoli",
+            "data" => PermissionRoleResource::collection($roles)
+        ], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        $roleData = [
+            "name" => $request->name,
+            "description" => $request->description
+        ];
+
+        $newRole = Role::create($roleData);
+
+        // 2. Carichiamo la relazione sul ruolo appena creato
+        $newRole->load('permissions');
+
+        return response()->json([
+            "message" => "Ruolo creato con successo",
+            "data" => new PermissionRoleResource($newRole)
+        ], 201);
     }
 
     /**
@@ -36,23 +49,29 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
-    }
+        // 3. Carichiamo i permessi per questo singolo ruolo prima di mostrarlo
+        $role->load('permissions');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
-    {
-        //
+        return response()->json([
+            "message" => "Dettagli ruolo",
+            "data" => new PermissionRoleResource($role)
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        //
+        $role->update($request->validated());
+
+        // 4. Carichiamo la relazione aggiornata prima di rispondere
+        $role->load('permissions');
+
+        return response()->json([
+            "message" => "Ruolo aggiornato con successo",
+            "data" => new PermissionRoleResource($role)
+        ], 200);
     }
 
     /**
@@ -60,6 +79,10 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+
+        return response()->json([
+            "message" => "Ruolo eliminato con successo"
+        ], 200);
     }
 }

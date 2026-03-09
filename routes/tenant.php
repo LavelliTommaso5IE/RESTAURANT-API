@@ -46,7 +46,7 @@ Route::middleware([
                 // Elimina un utente
                 Route::delete("/{id}", "deleteUser")
                     ->middleware("permission:edit_users");
-            });
+        });
 
         Route::controller(RoleController::class)
             ->prefix('roles')
@@ -55,28 +55,19 @@ Route::middleware([
                 Route::get("/", "index")
                     ->middleware("permission:view_roles");
 
-                Route::post("/", "create")
+                Route::get("/{role}", "show")
+                    ->middleware("permission:view_roles");
+
+                // CORRETTO: punta alla funzione store()
+                Route::post("/", "store") 
                     ->middleware("permission:edit_roles");
 
-                Route::put("/{id}", "update")
+                Route::put("/{role}", "update")
                     ->middleware("permission:edit_roles");
 
-                Route::delete("/{id}", "delete")
+                // CORRETTO: punta alla funzione destroy()
+                Route::delete("/{role}", "destroy") 
                     ->middleware("permission:edit_roles");
-            });
-
-        // GESTIONE RUOLI (Pronta per il futuro RoleController)
-        // Route::controller(RoleController::class)->prefix('roles')->group(function () {
-        Route::prefix('roles')->group(function () {
-            
-            Route::get("/", function() {
-                return response()->json(["message" => "Lista ruoli in creazione"], 200);
-            });
-
-            Route::post("/", function() {
-                return response()->json(["message" => "Creazione ruolo in corso"], 200);
-            });
-
         });
     });
 });
