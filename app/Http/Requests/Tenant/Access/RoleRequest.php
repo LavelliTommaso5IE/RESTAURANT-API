@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tenant\Access;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,8 +29,8 @@ class RoleRequest extends FormRequest
             // Il nome deve essere unico nella tabella roles. 
             // Ignora il ruolo stesso se lo stiamo solo aggiornando!
             'name' => 'required|string|max:255|unique:roles,name,' . $roleId,
-            
-            'description' => 'required|string|max:1000' 
+
+            'description' => 'required|string|max:1000'
         ];
     }
 }

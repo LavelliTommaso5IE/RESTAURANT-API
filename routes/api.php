@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TenantController; // <-- Importiamo il Controller!
+use App\Http\Controllers\Central\TenantController; // <-- Importiamo il Controller!
 
 Route::get('/ping', function (Request $request) {
     return response()->json(['message' => 'Api centrale']);

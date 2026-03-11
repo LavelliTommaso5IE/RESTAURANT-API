@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tenant\Access;
 
-use App\Http\Resources\PermissionResource;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Tenant\Access\PermissionResource;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 

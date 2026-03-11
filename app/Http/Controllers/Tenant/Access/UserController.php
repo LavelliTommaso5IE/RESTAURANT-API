@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tenant\Access;
 
-use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\Access\CreateUserRequest;
+use App\Http\Requests\Tenant\Access\UpdateUserRequest;
+use App\Http\Resources\Tenant\Access\UserResource;
 use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class UserController extends Controller
             // SALVO IL NUOVO UTENTE IN UNA VARIABILE
             $newUser = User::create($userData);
             $newUser->load("role");
-            
+
         } catch (Exception $e) {
             return response()->json([ // AGGIUNTO IL RETURN
                 "message" => "Impossibile creare l'utente",

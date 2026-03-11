@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Central;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Tenant;
-use App\Http\Requests\StoreTenantRequest;
-use App\Http\Resources\TenantResource;
+use App\Http\Requests\Central\StoreTenantRequest;
+use App\Http\Resources\Central\TenantResource;
 use App\Models\User;
 use App\Models\Role;
 

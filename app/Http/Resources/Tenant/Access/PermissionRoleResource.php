@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Tenant\Access;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,8 +38,8 @@ class PermissionRoleResource extends JsonResource
         if ($this->relationLoaded('permissions') && $this->permissions) {
             return PermissionResource::collection($this->permissions);
         }
-        
+
         // Altrimenti non mostro nulla (oppure potresti restituire una stringa vuota o un array vuoto [])
-        return null; 
+        return null;
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tenant\Access;
 
-use App\Http\Requests\AssignPermissionRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\Access\AssignPermissionRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use App\Http\Resources\PermissionRoleResource;
-use App\Http\Requests\RoleRequest;
+use App\Http\Resources\Tenant\Access\PermissionRoleResource;
+use App\Http\Requests\Tenant\Access\RoleRequest;
 
 class RoleController extends Controller
 {

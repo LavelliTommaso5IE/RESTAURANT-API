@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Tenant\Access\PermissionController;
+use App\Http\Controllers\Tenant\Access\UserController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Tenant\Auth\AuthController;
+use App\Http\Controllers\Tenant\Access\RoleController;
 use App\Http\Middleware\JwtMiddleware;
 
 Route::middleware([
