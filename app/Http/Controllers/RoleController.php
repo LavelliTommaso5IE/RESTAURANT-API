@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssignPermissionRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Resources\PermissionRoleResource;
@@ -67,6 +68,7 @@ class RoleController extends Controller
             "message" => "Ruolo aggiornato con successo",
             "data" => new PermissionRoleResource($role)
         ], 200);
+
     }
 
     /**
@@ -78,6 +80,23 @@ class RoleController extends Controller
 
         return response()->json([
             "message" => "Ruolo eliminato con successo"
+        ], 200);
+    }
+
+    /**
+     * Add permissions to a specific role
+     */
+
+    public function assignPermissions(AssignPermissionRequest $request, Role $role)
+    {
+        // Estraiamo SOLO l'array dei numeri dal validatore!
+        $role->permissions()->sync($request->validated('permission_ids'));
+
+        $role->load("permissions");
+
+        return response()->json([
+            "message" => "Permissions updated correctly",
+            "data" => new PermissionRoleResource($role)
         ], 200);
     }
 }

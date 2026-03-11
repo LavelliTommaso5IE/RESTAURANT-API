@@ -15,11 +15,14 @@ class TenantSeeder extends Seeder
             // Utenti
             ['name' => 'view_users', 'description' => 'Permette di vedere la lista degli utenti'],
             ['name' => 'edit_users', 'description' => 'Permette di creare, modificare ed eliminare utenti'],
-            
+
             // Ruoli
             ['name' => 'view_roles', 'description' => 'Permette di vedere la lista dei ruoli'],
             ['name' => 'edit_roles', 'description' => 'Permette di creare, modificare ed eliminare ruoli'],
-            
+
+            //Permessi
+            ['name' => 'view_permissions', 'description' => 'Permette di vedere la lista dei ruoli'],
+
             // Altro
             ['name' => 'view_reports', 'description' => 'Permette di vedere i report aziendali'],
         ];
@@ -44,12 +47,12 @@ class TenantSeeder extends Seeder
         ]);
 
         // 3. AGGANCIAMO I PERMESSI AI RUOLI
-        
+
         // L'admin prende TUTTI i permessi (l'array pieno di ID che abbiamo raccolto prima)
         $adminRole->permissions()->attach($adminPermissionIds);
 
         // Lo user normale prende solo i permessi di LETTURA
-        $userPermissions = Permission::whereIn('name', ['view_users', 'view_reports'])->pluck('id');
+        $userPermissions = Permission::whereIn('name', ['view_users', 'view_reports', 'view_permissions'])->pluck('id');
         $userRole->permissions()->attach($userPermissions);
     }
 }
