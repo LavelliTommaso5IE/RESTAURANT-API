@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Central\TenantController;
 use App\Http\Controllers\Tenant\Access\PermissionController;
 use App\Http\Controllers\Tenant\Access\UserController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::middleware([
     ->prefix('api')
     ->group(function () {
 
+        Route::get('/check-tenant', [TenantController::class, 'checkTenant']);
         // --- ROTTE PUBBLICHE ---
         Route::post('/login', [AuthController::class, 'login']);
 

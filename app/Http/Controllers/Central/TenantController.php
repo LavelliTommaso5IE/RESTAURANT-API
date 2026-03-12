@@ -84,4 +84,20 @@ class TenantController extends Controller
             ], 500);
         }
     }
+
+    // In app/Http/Controllers/Tenant/TenantDetailsController.php (o simile)
+    public function checkTenant()
+    {
+        // Se arriviamo qui, il middleware InitializeTenancyByDomain ha già confermato che il tenant esiste
+        $tenant = tenant(); // Recupera l'oggetto tenant corrente
+
+        return response()->json([
+            "messages" => "Tenant trovato",
+            "data" => [
+                "exists" => true,
+                "tenant_name" => $tenant->name, // Utile per il frontend (es. titolo della pagina)
+                "description" => $tenant->description
+            ]
+        ], 200);
+    }
 }
