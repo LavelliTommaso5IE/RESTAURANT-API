@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use App\Models\RefreshToken;
+use App\Models\RefreshToken; // Ricorda: se l'hai spostato in Tenant/Access, aggiorna questo percorso!
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
@@ -13,14 +13,15 @@ use Exception;
 
 class JwtMiddleware
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $createToken = true)
     {
         $jwtSecret = env('JWT_SECRET');
         $token = $request->cookie('Authorization');
 
         // 1. Se non c'è l'access token, passiamo subito al piano B (Refresh)
         if (!$token) {
-            return $this->refreshToken($request, $next, $jwtSecret);
+            // CORREZIONE BUG 2: Aggiunto $createToken
+            return $this->refreshToken($request, $next, $jwtSecret, $createToken);
         }
 
         try {
@@ -32,10 +33,10 @@ class JwtMiddleware
 
         } catch (ExpiredException $e) {
             // 3. Se è scaduto, passiamo al piano B (Refresh)
-            return $this->refreshToken($request, $next, $jwtSecret);
+            return $this->refreshToken($request, $next, $jwtSecret, $createToken);
 
         } catch (Exception $e) {
-            // 4. Se è MANOMESSO, cacciamo l'utente e forziamo la pulizia dei cookie DIRETTAMENTE sulla risposta
+            // 4. Se è MANOMESSO
             return response()->json(['messaggio' => 'Token non valido o manomesso. Fai il login.'], 401)
                 ->withCookie(Cookie::forget('Authorization'))
                 ->withCookie(Cookie::forget('Refresh'));
@@ -48,7 +49,7 @@ class JwtMiddleware
     /**
      * Logica di rinnovo del token (Piano B)
      */
-    private function refreshToken(Request $request, Closure $next, $jwtSecret)
+    private function refreshToken(Request $request, Closure $next, $jwtSecret, $createToken)
     {
         $refreshTokenString = $request->cookie('Refresh');
 
@@ -69,24 +70,29 @@ class JwtMiddleware
                 ->withCookie(Cookie::forget('Refresh'));
         }
 
-        // BINGO! Rigeneriamo il nuovo Access Token
-        $payload = [
-            'iss' => url('/'),
-            'sub' => $refreshToken->user_id,
-            'role' => $refreshToken->user->role_id,
-            'iat' => time(),
-            'exp' => time() + (15 * 60) // Nuovi 15 minuti
-        ];
-
-        $newAccessToken = JWT::encode($payload, $jwtSecret, 'HS256');
-
-        // Identifichiamo l'utente per questa richiesta
+        // CORREZIONE BUG 1: Identifichiamo l'utente PRIMA di chiamare il controller!
         $request->attributes->add(['user_id' => $refreshToken->user_id]);
 
-        // FONDAMENTALE: Eseguiamo il controller e CATTURIAMO la risposta (es. il JSON di /api/me)
-        $response = $next($request);
+        if ($createToken) {
+            // Rigeneriamo il nuovo Access Token
+            $payload = [
+                'iss' => url('/'),
+                'sub' => $refreshToken->user_id,
+                'role' => $refreshToken->user->role_id,
+                'iat' => time(),
+                'exp' => time() + (15 * 60) // Nuovi 15 minuti
+            ];
 
-        // Ora attacchiamo il cookie DIRETTAMENTE alla risposta appena creata dal controller!
-        return $response->withCookie(cookie('Authorization', $newAccessToken, 15, '/', null, false, true));
+            $newAccessToken = JWT::encode($payload, $jwtSecret, 'HS256');
+
+            // FONDAMENTALE: Eseguiamo il controller ORA (che sa chi è l'utente)
+            $response = $next($request);
+
+            // Attacchiamo il cookie alla risposta e la restituiamo
+            return $response->withCookie(cookie('Authorization', $newAccessToken, 15, '/', null, false, true));
+        }
+
+        // CORREZIONE BUG 3: Se $createToken è false, mandiamo comunque avanti la richiesta
+        return $next($request);
     }
 }

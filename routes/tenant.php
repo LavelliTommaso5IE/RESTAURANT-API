@@ -24,11 +24,12 @@ Route::middleware([
         Route::get('/check-tenant', [TenantController::class, 'checkTenant']);
         // --- ROTTE PUBBLICHE ---
         Route::post('/login', [AuthController::class, 'login']);
+        Route::get("/logout", [AuthController::class, 'logout'])
+            ->middleware("jwt:false");
 
-        Route::get("/logout", [AuthController::class, 'logout']);
 
         // --- ROTTE PRIVATE (Protette da JWT) ---
-        Route::middleware([JwtMiddleware::class])->group(function () {
+        Route::middleware("jwt")->group(function () {
 
             Route::get('/me', [AuthController::class, 'me']);
 
