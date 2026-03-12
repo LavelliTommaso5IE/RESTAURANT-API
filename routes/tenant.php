@@ -25,6 +25,8 @@ Route::middleware([
         // --- ROTTE PUBBLICHE ---
         Route::post('/login', [AuthController::class, 'login']);
 
+        Route::get("/logout", [AuthController::class, 'logout']);
+
         // --- ROTTE PRIVATE (Protette da JWT) ---
         Route::middleware([JwtMiddleware::class])->group(function () {
 

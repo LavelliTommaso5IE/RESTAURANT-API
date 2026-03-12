@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Firebase\JWT\JWT;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -80,5 +81,21 @@ class AuthController extends Controller
         return response()->json([
             'user' => new UserResource($user)
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $refreshTokenString = $request->cookie('Refresh');
+
+        if ($refreshTokenString) {
+            // CORRETTO: Prima cerchi con where, poi elimini con delete
+            RefreshToken::where("token", $refreshTokenString)->delete();
+        }
+
+        return response()->json([
+            'message' => 'Logout effettuato con successo.'
+        ], 200) // Status 200 perché l'operazione è riuscita
+            ->withCookie(cookie()->forget('Authorization'))
+            ->withCookie(cookie()->forget('Refresh'));
     }
 }
