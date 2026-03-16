@@ -11,6 +11,7 @@ use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\Tenant\Auth\AuthController;
 use App\Http\Controllers\Tenant\Access\RoleController;
+use App\Http\Controllers\Tenant\CategoryController;
 use App\Http\Middleware\JwtMiddleware;
 
 Route::middleware([
@@ -97,5 +98,21 @@ Route::middleware([
                     Route::get("/", "index")
                         ->middleware("permission:view_permissions");
                 });
+
+            Route::controller(CategoryController::class)
+                ->prefix("categories")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_categories");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_categories");
+
+                    Route::put("/{category}", "update")
+                        ->middleware("permission:edit_categories");
+
+                    Route::delete("/{category}", "destroy")
+                        ->middleware("permission:edit_categories");
         });
     });
+});

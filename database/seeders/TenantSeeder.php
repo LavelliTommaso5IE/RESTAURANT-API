@@ -23,6 +23,10 @@ class TenantSeeder extends Seeder
             //Permessi
             ['name' => 'view_permissions', 'description' => 'Permette di vedere la lista dei ruoli'],
 
+            //Categorie
+            ['name' => 'view_categories', 'description' => 'Permette di vedere la lista delle categorie'],
+            ['name' => 'edit_categories', 'description' => 'Permette di creare, modificare ed eliminare categorie'],
+
             // Altro
             ['name' => 'view_reports', 'description' => 'Permette di vedere i report aziendali'],
         ];
