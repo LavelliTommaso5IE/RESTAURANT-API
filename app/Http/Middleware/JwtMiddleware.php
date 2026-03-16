@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use App\Models\RefreshToken; // Ricorda: se l'hai spostato in Tenant/Access, aggiorna questo percorso!
+use App\Models\RefreshToken;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
@@ -15,7 +15,9 @@ class JwtMiddleware
 {
     public function handle(Request $request, Closure $next, $createToken = true)
     {
+        // recupera la chiave segreta del JWT dal file .env
         $jwtSecret = env('JWT_SECRET');
+        // cerca il cookie Authorization che contiene l'access token
         $token = $request->cookie('Authorization');
 
         // 1. Se non c'è l'access token, passiamo subito al piano B (Refresh)
@@ -92,7 +94,9 @@ class JwtMiddleware
             return $response->withCookie(cookie('Authorization', $newAccessToken, 15, '/', null, false, true));
         }
 
-        // CORREZIONE BUG 3: Se $createToken è false, mandiamo comunque avanti la richiesta
+        // --- BUG FIX 3: LOGOUT ---
+        // Se $createToken è false (caso del Logout), non creiamo un nuovo token,
+        // ma lasciamo che la richiesta prosegua verso il controller per la pulizia DB.
         return $next($request);
     }
 }

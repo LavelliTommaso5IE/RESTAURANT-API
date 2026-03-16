@@ -29,29 +29,33 @@ class TenantController extends Controller
                 $contatore++;
             }
 
-            // 2. Creiamo il Tenant (qui parte l'automatismo che crea il DB e le tabelle)
+            // --- 2. CREAZIONE TENANT ---
+            // Qui scatta Stancl/Tenancy: 
+            // Viene creato un record nel DB centrale e, contemporaneamente, 
+            // viene creato un NUOVO Database fisico sul server.
             $tenant = Tenant::create([
                 'name' => $request->name,
                 'description' => $request->description,
             ]);
 
-            // 3. Creiamo il Dominio associato
+            // --- 3. ASSEGNAZIONE DOMINIO ---
+            // Collega l'URL generato prima al nuovo database creato.
             $tenant->domains()->create([
                 'domain' => $dominioCompleto
             ]);
 
-            // --- LA NOVITÀ: CREIAMO L'UTENTE NEL TENANT ---
+            // --- 4. CREIAMO L'UTENTE NEL TENANT ---
             // Il metodo run() "teletrasporta" Laravel dentro il database del tenant
-            // Dentro TenantController.php
 
             // Variabile temporanea per estrarre l'utente fuori dal database del tenant
             $adminCreato = null;
 
             $tenant->run(function () use ($request, &$adminCreato) { // <-- NOTA IL "&" davanti ad adminCreato
-
+            // Inizializziamo il database del tenant con i dati di base (es. i permessi standard)
                 $seeder = new \Database\Seeders\TenantSeeder();
                 $seeder->run();
-                // ... Logica del seeder ...
+                
+                // Troviamo il ruolo "admin" (creato dal seeder appena eseguito)
                 $roleAdmin = Role::where('name', 'admin')->first();
 
                 // Creiamo l'utente
@@ -85,7 +89,6 @@ class TenantController extends Controller
         }
     }
 
-    // In app/Http/Controllers/Tenant/TenantDetailsController.php (o simile)
     public function checkTenant()
     {
         // Se arriviamo qui, il middleware InitializeTenancyByDomain ha già confermato che il tenant esiste

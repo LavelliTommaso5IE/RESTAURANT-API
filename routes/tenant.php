@@ -6,7 +6,7 @@ use App\Http\Controllers\Central\TenantController;
 use App\Http\Controllers\Tenant\Access\PermissionController;
 use App\Http\Controllers\Tenant\Access\UserController;
 use Illuminate\Support\Facades\Route;
-use PHPUnit\Framework\Attributes\Group;
+//use PHPUnit\Framework\Attributes\Group;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\Tenant\Auth\AuthController;
@@ -14,32 +14,41 @@ use App\Http\Controllers\Tenant\Access\RoleController;
 use App\Http\Middleware\JwtMiddleware;
 
 Route::middleware([
-    'api',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
+    'api', //estensione del file api.php
+    //switch automatico sul DB del tenant in base al dominio
+    InitializeTenancyByDomain::class, 
+    //impedisce l'accesso alle rotte dei tenant se ci si trova sul dominio principale
+    PreventAccessFromCentralDomains::class, 
 ])
     ->prefix('api')
     ->group(function () {
-
+        //ROTTE PUBBLICHE (NON PROTETTE DA JWT)
+        //rotta per verificare se il tenant esiste
         Route::get('/check-tenant', [TenantController::class, 'checkTenant']);
-        // --- ROTTE PUBBLICHE ---
+        //rotta per autenticazione dell'utente sul tenant
         Route::post('/login', [AuthController::class, 'login']);
+        //rotta per il logout dell'utente (rimuove dal DB il refresh e dai cookie tutti i token)
         Route::get("/logout", [AuthController::class, 'logout'])
-            ->middleware("jwt:false");
+            ->middleware("jwt:false"); //evito che il middleware mi generi un nuovo access token
 
 
         // --- ROTTE PRIVATE (Protette da JWT) ---
         Route::middleware("jwt")->group(function () {
+            //tutte queste rotte passano per il middleware JWT, che verifica l'access token
+            // e, se scaduto, prova a rinnovarlo con il refresh token
 
             Route::get('/me', [AuthController::class, 'me']);
 
             // GESTIONE UTENTI (Raggruppate per Controller e Prefisso)
+            // seleziona automaticamente il controller UserController
             Route::controller(UserController::class)
                 ->prefix('users')
                 ->group(function () {
 
                 // Lista tutti gli utenti
                 Route::get("/", "index")
+                    //chiama il middleware dei permessi, che verifica se l'utente possiede il/i
+                    //permessi necessari per accedere a questa rotta (passati come argomento)
                     ->middleware("permission:view_users");
 
                 // Crea un nuovo utente
@@ -47,6 +56,8 @@ Route::middleware([
                     ->middleware("permission:edit_users");
 
                 // Aggiorna un utente esistente (Nota il plurale /users/{id})
+                // Model Binding: {user} indica che Laravel cercherà automaticamente
+                // l'utente nel database tramite l'ID fornito nell'URL (restituisce l'oggetto)
                 Route::put("/{user}", "updateUser")
                     ->middleware("permission:edit_users");
 
@@ -55,29 +66,26 @@ Route::middleware([
                     ->middleware("permission:edit_users");
             });
 
+            // GESTIONE RUOLI E PERMESSI (Raggruppate per Controller e Prefisso)
+            // seleziona automaticamente il controller RoleController
             Route::controller(RoleController::class)
                 ->prefix('roles')
                 ->group(function () {
-
                     Route::get("/", "index")
                         ->middleware("permission:view_roles");
 
                     Route::get("/{role}", "show")
                         ->middleware("permission:view_roles");
 
-                    // CORRETTO: punta alla funzione store()
                     Route::post("/", "store")
                         ->middleware("permission:edit_roles");
 
                     Route::put("/{role}", "update")
                         ->middleware("permission:edit_roles");
 
-                    // CORRETTO: punta alla funzione destroy()
                     Route::delete("/{role}", "destroy")
                         ->middleware("permission:edit_roles");
-
-                    // Questo andava già benissimo! Assicurati solo di aver rinominato 
-                    // la funzione nel controller in assignPermissions
+    
                     Route::put("/{role}/permissions", "assignPermissions")
                         ->middleware("permission:edit_roles");
                 });

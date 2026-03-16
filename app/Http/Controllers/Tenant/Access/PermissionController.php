@@ -14,6 +14,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        /**
+         * Recupera tutti i record dalla tabella 'permissions'.
+         * Essendo un sistema multi-tenant, questi permessi sono quelli 
+         * disponibili nel database specifico del tenant corrente.
+         */
         $permissions = Permission::get();
 
         return response()->json([

@@ -32,7 +32,7 @@ class RoleController extends Controller
     {
         $newRole = Role::create($request->validated());
 
-        // 2. Carichiamo la relazione sul ruolo appena creato
+        // 2. Carichiamo la relazione sul ruolo appena creato ([])
         $newRole->load('permissions');
 
         return response()->json([
@@ -91,6 +91,14 @@ class RoleController extends Controller
     public function assignPermissions(AssignPermissionRequest $request, Role $role)
     {
         // Estraiamo SOLO l'array dei numeri dal validatore!
+        /**
+         * IL METODO SYNC: 
+         * 1. Se passi [1, 2, 3] e nel DB c'erano [2, 4]:
+         * - Aggiunge 1 e 3.
+         * - Mantiene 2.
+         * - ELIMINA 4.
+         * In pratica "sincronizza" il database con quello che hai selezionato nel frontend.
+         */
         $role->permissions()->sync($request->validated('permission_ids'));
 
         $role->load("permissions");

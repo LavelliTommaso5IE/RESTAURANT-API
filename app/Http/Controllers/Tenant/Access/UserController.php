@@ -17,6 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::get();
+        // Eager Loading: carica la relazione 'role' per tutti gli utenti in un'unica query.
         $users->load("role");
 
         return response()->json([
@@ -29,9 +30,14 @@ class UserController extends Controller
     {
         try {
             // Prendiamo l'oggetto ruolo "user" per estrarne poi l'ID
+            /**
+             * Logica Aziendale: in questo sistema, ogni nuovo utente creato 
+             * riceve automaticamente il ruolo predefinito "user".
+             */
             $userRole = Role::where("name", "=", "user")->first();
 
             $userData = $request->validated();
+            // Assegniamo forzatamente l'ID del ruolo "user" trovato sopra.
             $userData["role_id"] = $userRole->id;
 
             // SALVO IL NUOVO UTENTE IN UNA VARIABILE
@@ -53,6 +59,10 @@ class UserController extends Controller
 
     public function updateUser(UpdateUserRequest $request, User $user)
     {
+        /**
+         * L'uso di User $user: è il Route Model Binding di Laravel.
+         * Laravel cerca automaticamente l'utente nel DB usando l'ID passato nell'URL.
+         */
         try {
             $updateData = $request->validated();
             $user->update($updateData);

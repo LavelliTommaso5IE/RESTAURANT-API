@@ -16,9 +16,14 @@ class CheckPermissionMiddleware
      */
     public function handle(Request $request, Closure $next, ...$requiredPermissions)
     {
+        // 1. RECUPERO IDENTITÀ
+        // Prende l'ID utente che il JwtMiddleware ha salvato negli attributi della richiesta.
+        // Senza il JwtMiddleware, questo valore sarebbe nullo.
         $userId = $request->attributes->get("user_id");
         
-        // Carichiamo utente e relazioni
+        // 2. CARICAMENTO DATI (Eager Loading)
+        // Carica l'utente dal database del tenant, includendo il suo ruolo 
+        // e tutti i permessi associati a quel ruolo in un'unica query.
         $user = User::with('role.permissions')->find($userId);
 
         // CONTROLLO DI SICUREZZA: L'utente esiste? Ha un ruolo assegnato?
@@ -28,10 +33,12 @@ class CheckPermissionMiddleware
             ], 403);
         }
 
-        // ATTENZIONE AL PLURALE: permissions, non permission!
+        // 4. ESTRAZIONE PERMESSI
+        // Trasforma la collezione di oggetti Permission in un semplice array di stringhe (nomi).
+        // Es: ['view_users', 'edit_users']
         $userPermissions = $user->role->permissions->pluck('name')->toArray();
 
-        // La tua logica perfetta dell'array_intersect
+        // 5. IL CONFRONTO (Logica Matematica)
         $matchingPermissions = array_intersect($userPermissions, $requiredPermissions);
         
         // Logica AND: li deve avere TUTTI
@@ -41,6 +48,7 @@ class CheckPermissionMiddleware
             ], 403); // <-- PUNTO E VIRGOLA AGGIUNTO QUI
         }
 
+        // L'utente ha superato tutti i controlli, la richiesta può procedere al Controller.
         return $next($request);
     }
 }
