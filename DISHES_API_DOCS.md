@@ -23,6 +23,7 @@ Recupera la lista di tutti i piatti presenti nel menu del tenant.
             "description": "Pasta con uovo, guanciale, pecorino e pepe",
             "image": "https://esempio.com/immagini/carbonara.jpg",
             "price": 12.50,
+            "is_orderable": true,
             "category_id": 2,
             "category": {
                 "id": 2,
@@ -50,7 +51,8 @@ Crea un nuovo piatto assegnandolo a una categoria esistente.
     "description": "Dolce tipico italiano",
     "image": "https://esempio.com/immagini/tiramisu.jpg",
     "price": 6.00,
-    "category_id": 3
+    "category_id": 3,
+    "is_orderable": true
 }
 ```
 
@@ -69,7 +71,8 @@ Modifica i dati di un piatto esistente. Puoi inviare anche solo i campi che vuoi
 ```json
 {
     "price": 7.50,
-    "description": "Dolce tipico italiano con savoiardi artigianali"
+    "description": "Dolce tipico italiano con savoiardi artigianali",
+    "is_orderable": false
 }
 ```
 

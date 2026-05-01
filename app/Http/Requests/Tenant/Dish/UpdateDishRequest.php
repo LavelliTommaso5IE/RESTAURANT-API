@@ -28,6 +28,7 @@ class UpdateDishRequest extends FormRequest
             'image' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
             'category_id' => 'sometimes|required|exists:categories,id',
+            'is_orderable' => 'boolean',
             'products' => 'nullable|array',
             'products.*.id' => 'required_with:products|exists:products,id',
             'products.*.quantity' => 'required_with:products|numeric|min:0',

@@ -20,6 +20,7 @@ class DishResource extends JsonResource
             'description' => $this->description,
             'image' => $this->image,
             'price' => (float) $this->price,
+            'is_orderable' => $this->is_orderable,
             'category' => $this->whenLoaded('category', function () {
                 return [
                     'id' => $this->category->id,

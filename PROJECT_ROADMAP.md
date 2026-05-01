@@ -21,10 +21,10 @@ Abbiamo già completato:
 
 ### 2. Gestione Menù
 I clienti potranno visualizzare i menù (pubblicamente).
-- [ ] Creazione Migration e Model `Menu` (es. Menù Pranzo, Menù Cena, Carta dei Vini).
-- [ ] Relazione: Tabella pivot `dish_menu` per associare i piatti ai vari menù.
-- [ ] Creazione Controller, Resource e Requests per lo staff (CRUD).
-- [ ] Endpoint pubblico `GET /api/menus` per far visualizzare il menù ai clienti senza autenticazione.
+- [x] Creazione Migration e Model `Menu` (es. Menù Pranzo, Menù Cena, Carta dei Vini).
+- [x] Relazione: Tabella pivot `dish_menu` per associare i piatti ai vari menù.
+- [x] Creazione Controller, Resource e Requests per lo staff (CRUD).
+- [x] Endpoint pubblico `GET /api/public/menus` per far visualizzare il menù ai clienti senza autenticazione.
 
 ### 3. Gestione Tavoli (Tables)
 - [ ] Creazione Migration e Model `Table` (campi: numero, posti_max, stato).
@@ -68,5 +68,3 @@ Il collegamento tra l'Ordine e la Cucina.
 - [ ] Endpoint per visualizzare i piatti più venduti.
 
 ---
-
-Se sei d'accordo con l'ordine, possiamo iniziare subito con il **Punto 1 (Prodotti)** oppure puoi dirmi tu da quale preferisci partire!

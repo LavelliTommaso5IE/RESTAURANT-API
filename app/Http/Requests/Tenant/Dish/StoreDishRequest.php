@@ -28,6 +28,7 @@ class StoreDishRequest extends FormRequest
             'image' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'is_orderable' => 'boolean',
             'products' => 'nullable|array',
             'products.*.id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|numeric|min:0',

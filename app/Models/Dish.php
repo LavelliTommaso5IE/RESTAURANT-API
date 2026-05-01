@@ -15,7 +15,12 @@ class Dish extends Model
         'description',
         'image',
         'price',
-        'category_id'
+        'category_id',
+        'is_orderable'
+    ];
+
+    protected $casts = [
+        'is_orderable' => 'boolean',
     ];
 
     public function category()
@@ -28,5 +33,10 @@ class Dish extends Model
         return $this->belongsToMany(Product::class)
                     ->withPivot('quantity', 'tolerance_percentage') //TODO: da chiarire
                     ->withTimestamps();
+    }
+
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class)->withTimestamps();
     }
 }

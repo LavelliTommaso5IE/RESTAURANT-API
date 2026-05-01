@@ -156,5 +156,32 @@ Route::middleware([
                     Route::delete("/{dish}", "destroy")
                         ->middleware("permission:edit_dishes");
                 });
+
+            Route::controller(\App\Http\Controllers\Tenant\MenuController::class)
+                ->prefix("menus")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_menus");
+
+                    Route::get("/{menu}", "show")
+                        ->middleware("permission:view_menus");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_menus");
+
+                    Route::put("/{menu}", "update")
+                        ->middleware("permission:edit_menus");
+
+                    Route::delete("/{menu}", "destroy")
+                        ->middleware("permission:edit_menus");
+                });
         });
+
+        // ROTTE PUBBLICHE (Fuori da JWT, ma dentro al tenant)
+        Route::controller(\App\Http\Controllers\Tenant\PublicMenuController::class)
+            ->prefix("public/menus")
+            ->group(function () {
+                Route::get("/", "index");
+                Route::get("/{menu}", "show");
+            });
     });

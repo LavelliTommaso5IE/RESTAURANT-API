@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dishes', function (Blueprint $table) {
+        Schema::create('menus', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->decimal('price', 8, 2);
-            $table->boolean('is_orderable')->default(true);
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('cover')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dishes');
+        Schema::dropIfExists('menus');
     }
 };
