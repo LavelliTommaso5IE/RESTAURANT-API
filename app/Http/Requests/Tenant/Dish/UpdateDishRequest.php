@@ -27,7 +27,11 @@ class UpdateDishRequest extends FormRequest
             'description' => 'nullable|string',
             'image' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
-            'category_id' => 'sometimes|required|exists:categories,id'
+            'category_id' => 'sometimes|required|exists:categories,id',
+            'products' => 'nullable|array',
+            'products.*.id' => 'required_with:products|exists:products,id',
+            'products.*.quantity' => 'required_with:products|numeric|min:0',
+            'products.*.tolerance_percentage' => 'nullable|numeric|min:0|max:100'
         ];
     }
 }

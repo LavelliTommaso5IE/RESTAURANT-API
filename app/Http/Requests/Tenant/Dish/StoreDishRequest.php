@@ -27,7 +27,11 @@ class StoreDishRequest extends FormRequest
             'description' => 'nullable|string',
             'image' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'products' => 'nullable|array',
+            'products.*.id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|numeric|min:0',
+            'products.*.tolerance_percentage' => 'nullable|numeric|min:0|max:100'
         ];
     }
 }

@@ -22,20 +22,48 @@ class DishController extends Controller
     {
         $dish = Dish::create($request->validated());
 
-        // Load the category to include it in the response resource
-        $dish->load('category');
+        if ($request->has('products')) {
+            $syncData = [];
+            foreach ($request->products as $product) {
+                $syncData[$product['id']] = [
+                    'quantity' => $product['quantity'],
+                    'tolerance_percentage' => $product['tolerance_percentage'] ?? 0
+                ];
+            }
+            $dish->products()->sync($syncData);
+        }
+
+        // Load the category and products to include them in the response resource
+        $dish->load(['category', 'products']);
 
         return (new DishResource($dish))
             ->response()
             ->setStatusCode(201);
     }
 
+    public function show(Dish $dish)
+    {
+        $dish->load(['category', 'products']);
+        return new DishResource($dish);
+    }
+
     public function update(UpdateDishRequest $request, Dish $dish)
     {
         $dish->update($request->validated());
 
-        // Load the category to include it in the response resource
-        $dish->load('category');
+        if ($request->has('products')) {
+            $syncData = [];
+            foreach ($request->products as $product) {
+                $syncData[$product['id']] = [
+                    'quantity' => $product['quantity'],
+                    'tolerance_percentage' => $product['tolerance_percentage'] ?? 0
+                ];
+            }
+            $dish->products()->sync($syncData);
+        }
+
+        // Load the category and products to include them in the response resource
+        $dish->load(['category', 'products']);
 
         return new DishResource($dish);
     }

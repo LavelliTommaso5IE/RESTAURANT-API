@@ -119,10 +119,32 @@ Route::middleware([
                         ->middleware("permission:edit_categories");
                 });
 
+            Route::controller(\App\Http\Controllers\Tenant\ProductController::class)
+                ->prefix("products")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_products");
+
+                    Route::get("/{product}", "show")
+                        ->middleware("permission:view_products");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_products");
+
+                    Route::put("/{product}", "update")
+                        ->middleware("permission:edit_products");
+
+                    Route::delete("/{product}", "destroy")
+                        ->middleware("permission:edit_products");
+                });
+
             Route::controller(\App\Http\Controllers\Tenant\DishController::class)
                 ->prefix("dishes")
                 ->group(function () {
                     Route::get("/", "index")
+                        ->middleware("permission:view_dishes");
+
+                    Route::get("/{dish}", "show")
                         ->middleware("permission:view_dishes");
 
                     Route::post("/", "store")

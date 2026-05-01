@@ -13,11 +13,11 @@ Abbiamo già completato:
 ## Task da Completare
 
 ### 1. Gestione Prodotti (Magazzino / Ingredienti)
-- [ ] Creazione Migration e Model `Product`.
-- [ ] Relazione: Collegamento tra `Dish` e `Product` (probabilmente una tabella pivot `dish_product` per indicare gli ingredienti/ricetta di un piatto).
-- [ ] Creazione Requests (`StoreProductRequest`, `UpdateProductRequest`).
-- [ ] Creazione `ProductResource` e `ProductController`.
-- [ ] Rotte API in `tenant.php`.
+- [x] Creazione Migration e Model `Product`.
+- [x] Relazione: Collegamento tra `Dish` e `Product` (probabilmente una tabella pivot `dish_product` per indicare gli ingredienti/ricetta di un piatto).
+- [x] Creazione Requests (`StoreProductRequest`, `UpdateProductRequest`).
+- [x] Creazione `ProductResource` e `ProductController`.
+- [x] Rotte API in `tenant.php`.
 
 ### 2. Gestione Menù
 I clienti potranno visualizzare i menù (pubblicamente).

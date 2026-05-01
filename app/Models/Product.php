@@ -3,30 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Dish extends Model
+class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'description',
-        'image',
-        'price',
-        'category_id'
+        'quantity',
+        'unit'
     ];
 
-    public function category()
+    public function dishes()
     {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function products()
-    {
-        return $this->belongsToMany(Product::class)
+        return $this->belongsToMany(Dish::class)
                     ->withPivot('quantity', 'tolerance_percentage') //TODO: da chiarire
                     ->withTimestamps();
     }
+
+    // TODO: Implementare avvisi per l'amministratore quando i prodotti stanno per finire (soglia di esaurimento)
 }

@@ -26,6 +26,17 @@ class DishResource extends JsonResource
                     'name' => $this->category->name,
                 ];
             }),
+            'products' => $this->whenLoaded('products', function () {
+                return $this->products->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'unit' => $product->unit,
+                        'quantity' => (float) $product->pivot->quantity,
+                        'tolerance_percentage' => (float) $product->pivot->tolerance_percentage,
+                    ];
+                });
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
