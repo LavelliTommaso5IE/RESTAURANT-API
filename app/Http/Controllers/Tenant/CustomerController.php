@@ -39,4 +39,18 @@ class CustomerController extends Controller
         $customer->delete();
         return response()->json(["message" => "Cliente eliminato"], 200);
     }
+
+    public function reservations(Request $request, Customer $customer)
+    {
+        $year = $request->query('year', now()->year);
+
+        $reservations = $customer->reservations()
+            ->with('table')
+            ->whereYear('reservation_date', $year)
+            ->orderBy('reservation_date', 'desc')
+            ->orderBy('reservation_time', 'desc')
+            ->paginate(15);
+
+        return \App\Http\Resources\Tenant\Reservation\ReservationResource::collection($reservations);
+    }
 }

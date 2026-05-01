@@ -19,4 +19,9 @@ class Customer extends Model
         'address',
         'notes'
     ];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

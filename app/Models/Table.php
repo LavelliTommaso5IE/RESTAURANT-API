@@ -26,4 +26,9 @@ class Table extends Model
     {
         return $this->hasMany(Table::class, 'parent_id');
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

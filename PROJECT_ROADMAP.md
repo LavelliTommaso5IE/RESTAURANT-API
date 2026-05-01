@@ -41,10 +41,10 @@ Essendo per lo più per fatturazione o prenotazioni (senza login).
 - [x] Rotte API.
 
 ### 5. Gestione Prenotazioni (Reservations)
-- [ ] Creazione Migration e Model `Reservation` (data, ora, numero_persone, stato).
-- [ ] Relazioni: Appartiene a un `Customer` e a un `Table`.
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Rotte API per la gestione da parte dei camerieri/admin.
+- [x] Creazione Migration e Model `Reservation` (data, ora, numero_persone, stato).
+- [x] Relazioni: Appartiene a un `Customer` e a un `Table`.
+- [x] Creazione Controller, Resource e Requests.
+- [x] Rotte API per la gestione da parte dei camerieri/admin (incluso storico annuale del cliente).
 
 ### 6. Gestione Sconti (Discounts)
 - [ ] Creazione Migration e Model `Discount` (nome, percentuale o importo fisso, validità).

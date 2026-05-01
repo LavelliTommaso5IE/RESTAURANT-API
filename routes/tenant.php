@@ -225,6 +225,28 @@ Route::middleware([
 
                     Route::delete("/{customer}", "destroy")
                         ->middleware("permission:edit_customers");
+
+                    Route::get("/{customer}/reservations", "reservations")
+                        ->middleware("permission:view_reservations");
+                });
+
+            Route::controller(\App\Http\Controllers\Tenant\ReservationController::class)
+                ->prefix("reservations")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_reservations");
+
+                    Route::get("/{reservation}", "show")
+                        ->middleware("permission:view_reservations");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_reservations");
+
+                    Route::put("/{reservation}", "update")
+                        ->middleware("permission:edit_reservations");
+
+                    Route::delete("/{reservation}", "destroy")
+                        ->middleware("permission:edit_reservations");
                 });
         });
 
