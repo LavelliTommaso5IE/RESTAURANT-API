@@ -9,4 +9,9 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = ['name']; //consente l'assegnazione di massa del campo 'name'
+
+    public function dishes()
+    {
+        return $this->hasMany(Dish::class);
+    }
 }

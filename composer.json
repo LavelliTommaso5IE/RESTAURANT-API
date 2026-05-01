@@ -40,6 +40,11 @@
         }
     },
     "scripts": {
+        "docs:build": [
+            "php artisan scribe:generate",
+            "@php -r \"$path = 'docs_export/index.html'; if (file_exists($path)) { $content = file_get_contents($path); $content = str_replace('../docs/', '', $content); file_put_contents($path, $content); }\"",
+            "echo - Documentazione generata e percorsi corretti in /docs_export -"
+        ],
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",

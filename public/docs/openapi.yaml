@@ -1,0 +1,542 @@
+openapi: 3.0.3
+info:
+  title: 'Laravel API Documentation'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8001'
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.'
+security:
+  -
+    default: []
+paths:
+  /api/ping:
+    get:
+      summary: ''
+      operationId: getApiPing
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Api centrale'
+                properties:
+                  message:
+                    type: string
+                    example: 'Api centrale'
+      tags:
+        - Endpoints
+  /api/create-tenant:
+    post:
+      summary: 'Metodo per creare un nuovo Tenant'
+      operationId: metodoPerCreareUnNuovoTenant
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 500 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+                  nullable: true
+                admin_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: d
+                admin_surname:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: l
+                admin_email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
+                  example: idickens@example.org
+                admin_password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: hwaykcmyuwpwlvqwrsitcpscql
+              required:
+                - name
+                - admin_name
+                - admin_surname
+                - admin_email
+                - admin_password
+  /api/check-tenant:
+    get:
+      summary: ''
+      operationId: getApiCheckTenant
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+  /api/login:
+    post:
+      summary: ''
+      operationId: postApiLogin
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gbailey@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: '|]|{+-'
+              required:
+                - email
+                - password
+  /api/logout:
+    get:
+      summary: ''
+      operationId: getApiLogout
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+  /api/me:
+    get:
+      summary: ''
+      operationId: getApiMe
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+  /api/users:
+    get:
+      summary: ''
+      operationId: getApiUsers
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+    post:
+      summary: ''
+      operationId: postApiUsers
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                surname:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: 'n'
+                email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
+                  example: ashly64@example.com
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: pBNvYg
+              required:
+                - name
+                - surname
+                - email
+                - password
+  '/api/users/{user_id}':
+    put:
+      summary: ''
+      operationId: putApiUsersUser_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                surname:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: 'n'
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: ashly64@example.com
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: pBNvYg
+                role_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the roles table.'
+                  example: null
+                stato:
+                  type: string
+                  description: ''
+                  example: disattivato
+                  enum:
+                    - attivo
+                    - temp
+                    - disattivato
+    delete:
+      summary: ''
+      operationId: deleteApiUsersUser_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'The ID of the user.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+  /api/roles:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+              required:
+                - name
+                - description
+  '/api/roles/{role_id}':
+    get:
+      summary: 'Display the specified resource.'
+      operationId: displayTheSpecifiedResource
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                description:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: 'Et animi quos velit et fugiat.'
+              required:
+                - name
+                - description
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: role_id
+        description: 'The ID of the role.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+  '/api/roles/{role_id}/permissions':
+    put:
+      summary: 'Add permissions to a specific role'
+      operationId: addPermissionsToASpecificRole
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission_ids:
+                  type: array
+                  description: 'The <code>id</code> of an existing record in the permissions table.'
+                  example: null
+                  items:
+                    type: string
+    parameters:
+      -
+        in: path
+        name: role_id
+        description: 'The ID of the role.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+  /api/permissions:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+  /api/categories:
+    get:
+      summary: ''
+      operationId: getApiCategories
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                properties:
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - Endpoints
+    post:
+      summary: ''
+      operationId: postApiCategories
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+              required:
+                - name
+  '/api/categories/{category_id}':
+    put:
+      summary: ''
+      operationId: putApiCategoriesCategory_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+              required:
+                - name
+    delete:
+      summary: ''
+      operationId: deleteApiCategoriesCategory_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: category_id
+        description: 'The ID of the category.'
+        example: 16
+        required: true
+        schema:
+          type: integer

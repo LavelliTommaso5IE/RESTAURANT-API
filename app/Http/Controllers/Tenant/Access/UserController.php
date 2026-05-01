@@ -10,6 +10,7 @@ use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
+// use Illuminate\Support\Facades\DB; // Aggiunto per le transazioni
 use Illuminate\Support\Facades\Hash; // Aggiunto per le password
 
 class UserController extends Controller
@@ -31,7 +32,7 @@ class UserController extends Controller
         try {
             // Prendiamo l'oggetto ruolo "user" per estrarne poi l'ID
             /**
-             * Logica Aziendale: in questo sistema, ogni nuovo utente creato 
+             * Logica di business: in questo sistema, ogni nuovo utente creato 
              * riceve automaticamente il ruolo predefinito "user".
              */
             $userRole = Role::where("name", "=", "user")->first();

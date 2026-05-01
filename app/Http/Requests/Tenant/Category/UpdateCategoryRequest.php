@@ -22,7 +22,7 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = $this->route("category")->id;
+        $categoryId = $this->route("category")?->id;
 
         // è unique, ma ignora la categoria che stiamo aggiornando (altrimenti non potrebbe mantenere lo stesso nome)
         return [

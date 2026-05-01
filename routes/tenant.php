@@ -52,7 +52,8 @@ Route::middleware([
                     //permessi necessari per accedere a questa rotta (passati come argomento)
                     ->middleware("permission:view_users");
 
-                // Crea un nuovo utente
+                // 1. ROTTA CREAZIONE UTENTE
+                // Endpoint: POST api/users/
                 Route::post("/", "createUser")
                     ->middleware("permission:edit_users");
 
@@ -105,6 +106,9 @@ Route::middleware([
                     Route::get("/", "index")
                         ->middleware("permission:view_categories");
 
+                    Route::get("/{category}", "show")
+                        ->middleware("permission:view_categories");
+
                     Route::post("/", "store")
                         ->middleware("permission:edit_categories");
 
@@ -113,6 +117,22 @@ Route::middleware([
 
                     Route::delete("/{category}", "destroy")
                         ->middleware("permission:edit_categories");
+                });
+
+            Route::controller(\App\Http\Controllers\Tenant\DishController::class)
+                ->prefix("dishes")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_dishes");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_dishes");
+
+                    Route::put("/{dish}", "update")
+                        ->middleware("permission:edit_dishes");
+
+                    Route::delete("/{dish}", "destroy")
+                        ->middleware("permission:edit_dishes");
+                });
         });
     });
-});

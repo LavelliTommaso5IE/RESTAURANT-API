@@ -7,6 +7,7 @@ use App\Http\Requests\Tenant\Category\StoreCategoryRequest;
 use App\Http\Requests\Tenant\Category\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Resources\Tenant\Category\CategoryResource;
+use App\Http\Resources\Tenant\Dish\DishResource;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,6 +17,17 @@ class CategoryController extends Controller
 
         //ritorno tutte le cateorie, trasformate in risorse
         return CategoryResource::collection($categories);
+    }
+
+    public function show(Category $category){
+        // Ottengo i piatti della categoria paginati (es. 10 per pagina)
+        $dishes = $category->dishes()->paginate(10);
+
+        // Ritorno i dettagli della categoria e i piatti paginati
+        return response()->json([
+            'category' => new CategoryResource($category),
+            'dishes' => DishResource::collection($dishes)->response()->getData(true)
+        ]);
     }
 
     public function store(StoreCategoryRequest $request){
