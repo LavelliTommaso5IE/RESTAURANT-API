@@ -27,9 +27,12 @@ I clienti potranno visualizzare i menù (pubblicamente).
 - [x] Endpoint pubblico `GET /api/public/menus` per far visualizzare il menù ai clienti senza autenticazione.
 
 ### 3. Gestione Tavoli (Tables)
-- [ ] Creazione Migration e Model `Table` (campi: numero, posti_max, stato).
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Rotte API.
+- [x] Creazione Migration e Model `Table` (campi: numero, posti_max, stato).
+- [x] Logica unione tavoli (potenziale self-referencing o tabella d'appoggio per i "Tavoli Uniti").
+- [x] Endpoint per cambiare stato (Libero, Occupato, Da Sparecchiare).
+- [x] Generazione/Assegnazione dinamica di un QRCode (o token temporaneo) per permettere ai clienti del tavolo di ordinare dal telefono.
+- [x] Creazione Controller, Resource e Requests.
+- [x] Rotte API.
 
 ### 4. Gestione Clienti (Anagrafica)
 Essendo per lo più per fatturazione o prenotazioni (senza login).
