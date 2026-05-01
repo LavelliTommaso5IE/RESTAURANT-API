@@ -36,9 +36,9 @@ I clienti potranno visualizzare i menù (pubblicamente).
 
 ### 4. Gestione Clienti (Anagrafica)
 Essendo per lo più per fatturazione o prenotazioni (senza login).
-- [ ] Creazione Migration e Model `Customer` (nome, telefono, email, note).
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Rotte API.
+- [x] Creazione Migration e Model `Customer` (campi: nome, cognome, telefono, email, p_iva/cf facoltativi, indirizzo e note).
+- [x] CRUD base per lo staff per gestire l'anagrafica.
+- [x] Rotte API.
 
 ### 5. Gestione Prenotazioni (Reservations)
 - [ ] Creazione Migration e Model `Reservation` (data, ora, numero_persone, stato).

@@ -207,6 +207,25 @@ Route::middleware([
                     Route::post("/{table}/clear", "clearTable")
                         ->middleware("permission:edit_tables");
                 });
+
+            Route::controller(\App\Http\Controllers\Tenant\CustomerController::class)
+                ->prefix("customers")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_customers");
+
+                    Route::get("/{customer}", "show")
+                        ->middleware("permission:view_customers");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_customers");
+
+                    Route::put("/{customer}", "update")
+                        ->middleware("permission:edit_customers");
+
+                    Route::delete("/{customer}", "destroy")
+                        ->middleware("permission:edit_customers");
+                });
         });
 
         // ROTTE PUBBLICHE (Fuori da JWT, ma dentro al tenant)
