@@ -17,6 +17,8 @@ class Discount extends Model
         'value',
         'current_balance',
         'min_order_value',
+        'usage_limit',
+        'usage_count',
         'is_active',
         'valid_until'
     ];

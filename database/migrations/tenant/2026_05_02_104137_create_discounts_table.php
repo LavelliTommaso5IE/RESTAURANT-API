@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('value', 8, 2);
             $table->decimal('current_balance', 8, 2)->nullable();
             $table->decimal('min_order_value', 8, 2)->nullable();
+            $table->integer('usage_limit')->nullable();
+            $table->integer('usage_count')->default(0);
             $table->boolean('is_active')->default(true);
             $table->dateTime('valid_until')->nullable();
             $table->softDeletes();

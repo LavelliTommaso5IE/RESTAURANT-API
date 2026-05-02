@@ -40,6 +40,8 @@ class TenantSeeder extends Seeder
             ['name' => 'edit_orders', 'description' => 'Permette di gestire gli ordini'],
             ['name' => 'view_comande', 'description' => 'Permette di vedere le comande'],
             ['name' => 'edit_comande', 'description' => 'Permette di gestire le comande'],
+            ['name' => 'view_payments', 'description' => 'Permette di vedere i pagamenti'],
+            ['name' => 'edit_payments', 'description' => 'Permette di gestire i pagamenti'],
 
             // Clienti, Sconti, Reports, Logs
             ['name' => 'view_customers', 'description' => 'Permette di vedere i clienti'],
@@ -103,6 +105,7 @@ class TenantSeeder extends Seeder
         $cashierPermissions = Permission::whereIn('name', [
             'view_tables',
             'view_orders', 'edit_orders',
+            'view_payments', 'edit_payments',
             'view_customers', 'edit_customers',
             'view_discounts', 'edit_discounts',
             'view_reports'

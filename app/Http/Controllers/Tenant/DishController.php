@@ -20,7 +20,11 @@ class DishController extends Controller
 
     public function store(StoreDishRequest $request)
     {
-        $dish = Dish::create($request->validated());
+        $data = $request->validated();
+        if (!isset($data['is_orderable'])) {
+            $data['is_orderable'] = true;
+        }
+        $dish = Dish::create($data);
 
         if ($request->has('products')) {
             $syncData = [];

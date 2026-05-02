@@ -52,18 +52,13 @@ Essendo per lo più per fatturazione o prenotazioni (senza login).
 - [x] Rotte API.
 
 ### 7. Gestione Ordini (Orders / Conti)
-Il cuore del sistema di cassa.
-- [ ] Creazione Migration e Model `Order` (stato_pagamento, totale, data).
-- [ ] Relazioni: Appartiene a un `Table`, eventualmente a un `Customer`, e può avere uno `Discount`.
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Rotte API (creazione ordine, applicazione sconto, chiusura conto).
+- [x] Creazione Migration e Model `Order` (collegamento a Table, Customer, Discount, totale, stato pagamento).
+- [x] Creazione Migration e Model `Payment` (gestione conti divisi e metodi di pagamento).
+- [x] Logica per chiusura conto, associazione cliente e applicazione sconti/gift cards.
 
-### 8. Gestione Comande (Cucina / Order Items)
-Il collegamento tra l'Ordine e la Cucina.
-- [ ] Creazione Migration e Model `Comanda` (quantità, note_cucina, stato [es: inviato, in_preparazione, pronto, consegnato]).
-- [ ] Relazioni: Appartiene a un `Order` e fa riferimento a un `Dish`.
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Endpoint specifici per la cucina: `PUT /api/comande/{id}/status` per far avanzare lo stato.
+### 8. Gestione Comande (OrderItem)
+- [x] Creazione Migration e Model `OrderItem` (quantità, snapshot prezzo, stato preparazione).
+- [x] Endpoint per cucina/bar: avanzamento stato (pending, preparing, ready, served).
 
 ### 9. Reportistica (Dashboard)
 - [ ] Creazione di un `ReportController`.

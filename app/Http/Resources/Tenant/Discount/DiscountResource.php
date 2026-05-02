@@ -22,6 +22,8 @@ class DiscountResource extends JsonResource
             'value' => $this->value,
             'current_balance' => $this->current_balance,
             'min_order_value' => $this->min_order_value,
+            'usage_limit' => $this->usage_limit,
+            'usage_count' => $this->usage_count,
             'is_active' => $this->is_active,
             'valid_until' => $this->valid_until ? $this->valid_until->toDateTimeString() : null,
             'created_at' => $this->created_at,

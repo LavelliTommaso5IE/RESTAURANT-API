@@ -270,6 +270,54 @@ Route::middleware([
                     Route::delete("/{discount}", "destroy")
                         ->middleware("permission:edit_discounts");
                 });
+
+            Route::controller(\App\Http\Controllers\Tenant\OrderController::class)
+                ->prefix("orders")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_orders");
+
+                    Route::get("/{order}", "show")
+                        ->middleware("permission:view_orders");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_orders");
+
+                    Route::post("/{order}/close", "close")
+                        ->middleware("permission:edit_orders");
+
+                    Route::post("/{order}/discount", "applyDiscount")
+                        ->middleware("permission:edit_orders");
+
+                    Route::delete("/{order}/discount", "removeDiscount")
+                        ->middleware("permission:edit_orders");
+
+                    Route::post("/{order}/customer", "associateCustomer")
+                        ->middleware("permission:edit_orders");
+                });
+
+            Route::controller(\App\Http\Controllers\Tenant\OrderItemController::class)
+                ->prefix("order-items")
+                ->group(function () {
+                    Route::post("/order/{order}", "store")
+                        ->middleware("permission:edit_orders");
+
+                    Route::put("/{orderItem}/status", "updateStatus")
+                        ->middleware("permission:edit_comande");
+
+                    Route::delete("/{orderItem}", "destroy")
+                        ->middleware("permission:edit_orders");
+                });
+
+            Route::controller(\App\Http\Controllers\Tenant\PaymentController::class)
+                ->prefix("payments")
+                ->group(function () {
+                    Route::post("/order/{order}", "store")
+                        ->middleware("permission:edit_payments");
+
+                    Route::delete("/{payment}", "destroy")
+                        ->middleware("permission:edit_payments");
+                });
         });
 
         // ROTTE PUBBLICHE (Fuori da JWT, ma dentro al tenant)
