@@ -47,9 +47,9 @@ Essendo per lo più per fatturazione o prenotazioni (senza login).
 - [x] Rotte API per la gestione da parte dei camerieri/admin (incluso storico annuale del cliente).
 
 ### 6. Gestione Sconti (Discounts)
-- [ ] Creazione Migration e Model `Discount` (nome, percentuale o importo fisso, validità).
-- [ ] Creazione Controller, Resource e Requests.
-- [ ] Rotte API.
+- [x] Creazione Migration e Model `Discount` (nome, percentuale o importo fisso, validità, gift card).
+- [x] Creazione Controller, Resource e Requests.
+- [x] Rotte API.
 
 ### 7. Gestione Ordini (Orders / Conti)
 Il cuore del sistema di cassa.

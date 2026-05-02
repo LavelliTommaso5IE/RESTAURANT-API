@@ -248,6 +248,28 @@ Route::middleware([
                     Route::delete("/{reservation}", "destroy")
                         ->middleware("permission:edit_reservations");
                 });
+
+            Route::controller(\App\Http\Controllers\Tenant\DiscountController::class)
+                ->prefix("discounts")
+                ->group(function () {
+                    Route::get("/", "index")
+                        ->middleware("permission:view_discounts");
+
+                    Route::get("/code/{code}", "showByCode")
+                        ->middleware("permission:view_discounts");
+
+                    Route::get("/{discount}", "show")
+                        ->middleware("permission:view_discounts");
+
+                    Route::post("/", "store")
+                        ->middleware("permission:edit_discounts");
+
+                    Route::put("/{discount}", "update")
+                        ->middleware("permission:edit_discounts");
+
+                    Route::delete("/{discount}", "destroy")
+                        ->middleware("permission:edit_discounts");
+                });
         });
 
         // ROTTE PUBBLICHE (Fuori da JWT, ma dentro al tenant)
