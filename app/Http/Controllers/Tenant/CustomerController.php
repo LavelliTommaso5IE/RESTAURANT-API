@@ -13,31 +13,42 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::all();
-        return CustomerResource::collection($customers);
+        return response()->json([
+            'message' => 'Lista clienti recuperata con successo',
+            'data' => CustomerResource::collection($customers)
+        ], 200);
     }
 
     public function store(StoreCustomerRequest $request)
     {
-        $customer = Customer::create($request->validated());
-        return (new CustomerResource($customer))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => 'Cliente creato con successo',
+            'data' => new CustomerResource($customer)
+        ], 201);
     }
 
     public function show(Customer $customer)
     {
-        return new CustomerResource($customer);
+        return response()->json([
+            'message' => 'Dettaglio cliente recuperato con successo',
+            'data' => new CustomerResource($customer)
+        ], 200);
     }
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->validated());
-        return new CustomerResource($customer);
+        return response()->json([
+            'message' => 'Cliente aggiornato con successo',
+            'data' => new CustomerResource($customer)
+        ], 200);
     }
 
     public function destroy(Customer $customer)
     {
-        $customer->delete();
-        return response()->json(["message" => "Cliente eliminato"], 200);
+        return response()->json([
+            "message" => "Cliente eliminato",
+            "data" => null
+        ], 200);
     }
 
     public function reservations(Request $request, Customer $customer)
@@ -51,6 +62,9 @@ class CustomerController extends Controller
             ->orderBy('reservation_time', 'desc')
             ->paginate(15);
 
-        return \App\Http\Resources\Tenant\Reservation\ReservationResource::collection($reservations);
+        return response()->json([
+            'message' => 'Storico prenotazioni cliente',
+            'data' => \App\Http\Resources\Tenant\Reservation\ReservationResource::collection($reservations)->response()->getData(true)
+        ], 200);
     }
 }

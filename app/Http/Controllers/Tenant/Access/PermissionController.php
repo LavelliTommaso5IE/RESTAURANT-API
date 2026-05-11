@@ -22,7 +22,7 @@ class PermissionController extends Controller
         $permissions = Permission::get();
 
         return response()->json([
-            "message" => "Lista permessi",
+            "message" => "Lista permessi recuperata con successo",
             "data" => PermissionResource::collection($permissions)
         ], 200);
     }

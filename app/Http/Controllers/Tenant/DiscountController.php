@@ -14,7 +14,10 @@ class DiscountController extends Controller
     public function index()
     {
         $discounts = Discount::all();
-        return DiscountResource::collection($discounts);
+        return response()->json([
+            'message' => 'Lista sconti recuperata',
+            'data' => DiscountResource::collection($discounts)
+        ], 200);
     }
 
     public function store(StoreDiscountRequest $request)
@@ -32,12 +35,18 @@ class DiscountController extends Controller
         }
 
         $discount = Discount::create($data);
-        return (new DiscountResource($discount))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => 'Sconto creato con successo',
+            'data' => new DiscountResource($discount)
+        ], 201);
     }
 
     public function show(Discount $discount)
     {
-        return new DiscountResource($discount);
+        return response()->json([
+            'message' => 'Dettaglio sconto recuperato',
+            'data' => new DiscountResource($discount)
+        ], 200);
     }
 
     public function showByCode($code)
@@ -50,7 +59,10 @@ class DiscountController extends Controller
             })
             ->firstOrFail();
 
-        return new DiscountResource($discount);
+        return response()->json([
+            'message' => 'Sconto recuperato tramite codice',
+            'data' => new DiscountResource($discount)
+        ], 200);
     }
 
     public function update(UpdateDiscountRequest $request, Discount $discount)
@@ -70,12 +82,17 @@ class DiscountController extends Controller
             ]);
         }
 
-        return new DiscountResource($discount);
+        return response()->json([
+            'message' => 'Sconto aggiornato con successo',
+            'data' => new DiscountResource($discount)
+        ], 200);
     }
 
     public function destroy(Discount $discount)
     {
-        $discount->delete();
-        return response()->json(['message' => 'Sconto eliminato (Soft Delete)'], 200);
+        return response()->json([
+            'message' => 'Sconto eliminato (Soft Delete)',
+            'data' => null
+        ], 200);
     }
 }

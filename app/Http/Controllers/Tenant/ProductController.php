@@ -13,30 +13,44 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        return ProductResource::collection($products);
+        return response()->json([
+            'message' => 'Lista prodotti recuperata',
+            'data' => ProductResource::collection($products)
+        ], 200);
     }
 
     public function store(StoreProductRequest $request)
     {
         $product = Product::create($request->validated());
-        return (new ProductResource($product))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => 'Prodotto creato con successo',
+            'data' => new ProductResource($product)
+        ], 201);
     }
 
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        return response()->json([
+            'message' => 'Dettagli prodotto recuperati',
+            'data' => new ProductResource($product)
+        ], 200);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->validated());
-        return new ProductResource($product);
+        return response()->json([
+            'message' => 'Prodotto aggiornato con successo',
+            'data' => new ProductResource($product)
+        ], 200);
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
-        return response()->json(["message" => "Prodotto eliminato"], 200);
+        return response()->json([
+            "message" => "Prodotto eliminato",
+            "data" => null
+        ], 200);
     }
 }

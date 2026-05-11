@@ -15,8 +15,10 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['table', 'customer', 'discount', 'items.dish', 'payments.discount'])->latest()->get();
-        return OrderResource::collection($orders);
+        return response()->json([
+            'message' => 'Lista ordini recuperata con successo',
+            'data' => OrderResource::collection($orders)
+        ], 200);
     }
 
     public function store(StoreOrderRequest $request)
@@ -38,22 +40,23 @@ class OrderController extends Controller
             ]);
 
             // Aggiorna lo stato del tavolo
-            $table->update(['status' => 'occupied']);
-
-            return (new OrderResource($order->load('table')))->response()->setStatusCode(201);
+            return response()->json([
+                'message' => 'Ordine creato con successo',
+                'data' => new OrderResource($order->load('table'))
+            ], 201);
         });
     }
 
     public function removeDiscount(Order $order)
     {
         if ($order->status !== 'open') {
-            return response()->json(['message' => 'Non puoi modificare uno sconto su un ordine chiuso.'], 422);
+            return response()->json(['message' => 'Non puoi modificare uno sconto su un ordine chiuso.', 'data' => null], 422);
         }
 
         // Se ci sono già dei pagamenti effettuati via Gift Card, non possiamo sganciarla senza prima stornare i pagamenti
         $hasGiftCardPayments = $order->payments()->where('payment_method', 'gift_card')->exists();
         if ($hasGiftCardPayments) {
-            return response()->json(['message' => 'Impossibile rimuovere lo sconto: sono già stati registrati pagamenti via Gift Card. Elimina prima i pagamenti.'], 422);
+            return response()->json(['message' => 'Impossibile rimuovere lo sconto: sono già stati registrati pagamenti via Gift Card. Elimina prima i pagamenti.', 'data' => null], 422);
         }
 
         $order->update([
@@ -62,12 +65,18 @@ class OrderController extends Controller
             'final_amount' => $order->total_amount
         ]);
 
-        return new OrderResource($order->load('discount'));
+        return response()->json([
+            'message' => 'Sconto rimosso con successo',
+            'data' => new OrderResource($order->load('discount'))
+        ], 200);
     }
 
     public function show(Order $order)
     {
-        return new OrderResource($order->load(['table', 'customer', 'discount', 'items.dish', 'payments.discount']));
+        return response()->json([
+            'message' => 'Dettaglio ordine recuperato con successo',
+            'data' => new OrderResource($order->load(['table', 'customer', 'discount', 'items.dish', 'payments.discount']))
+        ], 200);
     }
 
     /**
@@ -79,7 +88,10 @@ class OrderController extends Controller
         
         $order->update(['customer_id' => $request->customer_id]);
         
-        return new OrderResource($order->load('customer'));
+        return response()->json([
+            'message' => 'Cliente associato con successo',
+            'data' => new OrderResource($order->load('customer'))
+        ], 200);
     }
 
     /**
@@ -107,18 +119,18 @@ class OrderController extends Controller
                 ->first();
 
             if (!$discount) {
-                return response()->json(['message' => 'Codice sconto non valido, scaduto o inesistente.'], 404);
+                return response()->json(['message' => 'Codice sconto non valido, scaduto o inesistente.', 'data' => null], 404);
             }
         }
 
         // Controllo limite di utilizzo
         if ($discount->usage_limit !== null && $discount->usage_count >= $discount->usage_limit) {
-            return response()->json(['message' => 'Questo sconto ha raggiunto il limite massimo di utilizzi.'], 422);
+            return response()->json(['message' => 'Questo sconto ha raggiunto il limite massimo di utilizzi.', 'data' => null], 422);
         }
 
         // Le Gift Card ora si usano come metodo di pagamento, non come sconto globale
         if ($discount->type === 'gift_card') {
-            return response()->json(['message' => 'Le Gift Card devono essere usate come metodo di pagamento, non come sconto globale.'], 422);
+            return response()->json(['message' => 'Le Gift Card devono essere usate come metodo di pagamento, non come sconto globale.', 'data' => null], 422);
         }
         
         // Calcoliamo il totale attuale basato sugli items
@@ -140,7 +152,10 @@ class OrderController extends Controller
             'final_amount' => max(0, $totalAmount - $discountAmount)
         ]);
 
-        return new OrderResource($order->load('discount'));
+        return response()->json([
+            'message' => 'Sconto applicato con successo',
+            'data' => new OrderResource($order->load('discount'))
+        ], 200);
     }
 
     /**
@@ -149,7 +164,7 @@ class OrderController extends Controller
     public function close(Order $order)
     {
         if ($order->status !== 'open') {
-            return response()->json(['message' => 'L\'ordine è già chiuso o annullato.'], 422);
+            return response()->json(['message' => 'L\'ordine è già chiuso o annullato.', 'data' => null], 422);
         }
 
         // Verifica che il pagamento sia completo
@@ -160,7 +175,8 @@ class OrderController extends Controller
             $missing = round($finalAmount - $paidAmount, 2);
             return response()->json([
                 'message' => 'Il totale pagato non copre il conto finale.',
-                'missing' => $missing
+                'missing' => $missing,
+                'data' => null
             ], 422);
         }
 
@@ -175,7 +191,10 @@ class OrderController extends Controller
             // Imposta il tavolo in stato "cleaning" (come da logica precedente dell'utente)
             $order->table->update(['status' => 'cleaning']);
 
-            return new OrderResource($order);
+            return response()->json([
+                'message' => 'Ordine chiuso con successo',
+                'data' => new OrderResource($order)
+            ], 200);
         });
     }
 }

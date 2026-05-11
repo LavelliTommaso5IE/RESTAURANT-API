@@ -25,13 +25,13 @@ class OrderItemController extends Controller
         ]);
 
         if ($order->status !== 'open') {
-            return response()->json(['message' => 'Non puoi aggiungere piatti a un ordine chiuso.'], 422);
+            return response()->json(['message' => 'Non puoi aggiungere piatti a un ordine chiuso.', 'data' => null], 422);
         }
 
         $dish = Dish::findOrFail($request->dish_id);
 
         if (!$dish->is_orderable) {
-            return response()->json(['message' => "Il piatto '{$dish->name}' non è attualmente ordinabile."], 422);
+            return response()->json(['message' => "Il piatto '{$dish->name}' non è attualmente ordinabile.", 'data' => null], 422);
         }
 
         $orderItem = OrderItem::create([
@@ -46,7 +46,10 @@ class OrderItemController extends Controller
         // Aggiorniamo il totale dell'ordine in tempo reale
         $this->updateOrderTotal($order);
 
-        return new OrderItemResource($orderItem->load('dish'));
+        return response()->json([
+            'message' => 'Comanda aggiunta all\'ordine',
+            'data' => new OrderItemResource($orderItem->load('dish'))
+        ], 201);
     }
 
     /**
@@ -55,7 +58,14 @@ class OrderItemController extends Controller
     public function updateStatus(UpdateOrderItemStatusRequest $request, OrderItem $orderItem)
     {
         $orderItem->update(['status' => $request->status]);
-        return new OrderItemResource($orderItem);
+        
+        // TODO: Implementare il consumo dei prodotti nel magazzino quando il piatto entra in preparazione/è servito.
+        // TODO: Inviare email all'amministratore se il consumo porta una scorta sotto la soglia critica.
+
+        return response()->json([
+            'message' => 'Stato comanda aggiornato',
+            'data' => new OrderItemResource($orderItem)
+        ], 200);
     }
 
     /**
@@ -69,7 +79,10 @@ class OrderItemController extends Controller
         
         $this->updateOrderTotal($order);
         
-        return response()->json(['message' => 'Piatto rimosso dall\'ordine'], 200);
+        return response()->json([
+            'message' => 'Piatto rimosso dall\'ordine',
+            'data' => null
+        ], 200);
     }
 
     private function updateOrderTotal(Order $order)

@@ -54,9 +54,10 @@ class UserController extends Controller
 
         return response()->json([ // AGGIUNTO IL RETURN
             "message" => "Utente creato con successo",
-            "user" => new UserResource($newUser) // PASSO IL NUOVO UTENTE
+            "data" => new UserResource($newUser) // PASSO IL NUOVO UTENTE
         ], 201);
     }
+    // TODO: Implementare l'invio dell'email di benvenuto/registrazione al nuovo utente.
 
     public function updateUser(UpdateUserRequest $request, User $user)
     {
@@ -78,7 +79,7 @@ class UserController extends Controller
 
         return response()->json([
             "message" => "Utente aggiornato con successo",
-            "user" => new UserResource($user)
+            "data" => new UserResource($user)
         ], 200);
     }
 
@@ -94,7 +95,8 @@ class UserController extends Controller
         }
 
         return response()->json([
-            "message" => "Utente eliminato con successo"
+            "message" => "Utente eliminato con successo",
+            "data" => null
         ], 200);
     }
 }

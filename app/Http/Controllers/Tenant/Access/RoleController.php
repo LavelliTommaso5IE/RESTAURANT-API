@@ -80,14 +80,15 @@ class RoleController extends Controller
         $role->delete();
 
         return response()->json([
-            "message" => "Ruolo eliminato con successo"
+            "message" => "Ruolo eliminato con successo",
+            "data" => null
         ], 200);
     }
 
     /**
      * Add permissions to a specific role
+     * TODO: Implementare/migliorare logica di assegnazione/rimozione dei permessi ai ruoli da parte dell'amministratore
      */
-
     public function assignPermissions(AssignPermissionRequest $request, Role $role)
     {
         // Estraiamo SOLO l'array dei numeri dal validatore!

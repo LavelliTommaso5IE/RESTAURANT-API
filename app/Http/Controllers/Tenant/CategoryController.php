@@ -15,8 +15,10 @@ class CategoryController extends Controller
     public function index(){
         $categories = Category::all();
 
-        //ritorno tutte le cateorie, trasformate in risorse
-        return CategoryResource::collection($categories);
+        return response()->json([
+            'message' => 'Lista categorie recuperata con successo',
+            'data' => CategoryResource::collection($categories)
+        ], 200);
     }
 
     public function show(Category $category){
@@ -25,31 +27,41 @@ class CategoryController extends Controller
 
         // Ritorno i dettagli della categoria e i piatti paginati
         return response()->json([
-            'category' => new CategoryResource($category),
-            'dishes' => DishResource::collection($dishes)->response()->getData(true)
-        ]);
+            'message' => 'Dettaglio categoria e piatti recuperati',
+            'data' => [
+                'category' => new CategoryResource($category),
+                'dishes' => DishResource::collection($dishes)->response()->getData(true)
+            ]
+        ], 200);
     }
 
     public function store(StoreCategoryRequest $request){
         $category = Category::create($request->validated());
 
         //restituisco l'oggetto appena creato
-        return (new CategoryResource($category))
-        ->response()
-        ->setStatusCode(201);
+        return response()->json([
+            'message' => 'Categoria creata con successo',
+            'data' => new CategoryResource($category)
+        ], 201);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category){
         $category->update($request->validated());
 
         //restituisco l'oggetto appena aggiornato
-        return new CategoryResource($category);
+        return response()->json([
+            'message' => 'Categoria aggiornata con successo',
+            'data' => new CategoryResource($category)
+        ], 200);
     }
 
     public function destroy(Category $category){
         $category->delete();
 
         //restituisco una risposta vuota con codice 204 (No Content)
-        return response()->json(["message"=> "Categoria eliminata"], 200);
+        return response()->json([
+            "message" => "Categoria eliminata",
+            "data" => null
+        ], 200);
     }
 }

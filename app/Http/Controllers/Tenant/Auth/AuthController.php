@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         // 3. Controlliamo se esiste e se la password è corretta usando Hash::check
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['messaggio' => 'Credenziali non valide'], 401);
+            return response()->json(['message' => 'Credenziali non valide', 'data' => null], 401);
         }
 
         // 4. CREAZIONE ACCESS TOKEN (JWT - Scade in 15 minuti)
@@ -59,9 +59,8 @@ class AuthController extends Controller
 
         // 7. RESTITUIAMO LA RISPOSTA CON I COOKIE ATTACCATI
         return response()->json([
-            'messaggio' => 'Login effettuato con successo!',
-            // Opzionale: restituiamo anche i dati dell'utente, ma non i token (quelli sono al sicuro nei cookie)
-            'user' => new UserResource($user)
+            'message' => 'Login effettuato con successo!',
+            'data' => new UserResource($user)
         ])->withCookie($cookieAccess)->withCookie($cookieRefresh);
     }
 
@@ -74,12 +73,13 @@ class AuthController extends Controller
         $user = User::with('role')->find($userId);
 
         if (!$user) {
-            return response()->json(['messaggio' => 'Utente non trovato'], 404);
+            return response()->json(['message' => 'Utente non trovato', 'data' => null], 404);
         }
 
         // 3. Restituiamo i dati puliti usando la tua splendida Resource
         return response()->json([
-            'user' => new UserResource($user)
+            'message' => 'Dettagli utente',
+            'data' => new UserResource($user)
         ]);
     }
 
@@ -93,9 +93,12 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'message' => 'Logout effettuato con successo.'
+            'message' => 'Logout effettuato con successo.',
+            'data' => null
         ], 200) // Status 200 perché l'operazione è riuscita
             ->withCookie(cookie()->forget('Authorization'))
             ->withCookie(cookie()->forget('Refresh'));
     }
+
+    // TODO: Implementare l'invio dell'email per il cambio password.
 }

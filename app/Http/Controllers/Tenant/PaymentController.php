@@ -19,7 +19,7 @@ class PaymentController extends Controller
     public function store(StorePaymentRequest $request, Order $order)
     {
         if ($order->status !== 'open') {
-            return response()->json(['message' => 'L\'ordine è già chiuso.'], 422);
+            return response()->json(['message' => 'L\'ordine è già chiuso.', 'data' => null], 422);
         }
 
         return DB::transaction(function () use ($request, $order) {
@@ -31,7 +31,8 @@ class PaymentController extends Controller
             if ($request->amount > ($remaining + 0.01)) {
                 return response()->json([
                     'message' => 'L\'importo inserito supera il saldo rimanente dell\'ordine.',
-                    'remaining' => $remaining
+                    'remaining' => $remaining,
+                    'data' => null
                 ], 422);
             }
 
@@ -42,7 +43,7 @@ class PaymentController extends Controller
                 $discountCode = $request->input('discount_code');
                 
                 if (!$discountCode) {
-                    return response()->json(['message' => 'Per il pagamento con Gift Card è necessario fornire il codice del buono.'], 422);
+                    return response()->json(['message' => 'Per il pagamento con Gift Card è necessario fornire il codice del buono.', 'data' => null], 422);
                 }
 
                 $discount = Discount::where('code', $discountCode)
@@ -51,7 +52,7 @@ class PaymentController extends Controller
                     ->first();
 
                 if (!$discount) {
-                    return response()->json(['message' => 'Gift Card non valida o inesistente.'], 404);
+                    return response()->json(['message' => 'Gift Card non valida o inesistente.', 'data' => null], 404);
                 }
 
                 // Verifica che la stessa Gift Card non sia già stata usata su questo ordine
@@ -61,13 +62,14 @@ class PaymentController extends Controller
                     ->exists();
 
                 if ($alreadyUsed) {
-                    return response()->json(['message' => 'Questa Gift Card è già stata utilizzata per questo ordine.'], 422);
+                    return response()->json(['message' => 'Questa Gift Card è già stata utilizzata per questo ordine.', 'data' => null], 422);
                 }
 
                 if ($discount->current_balance < $request->amount) {
                     return response()->json([
                         'message' => 'Saldo Gift Card insufficiente.',
-                        'available' => $discount->current_balance
+                        'available' => $discount->current_balance,
+                        'data' => null
                     ], 422);
                 }
 
@@ -93,7 +95,10 @@ class PaymentController extends Controller
                 'notes' => $request->notes
             ]);
 
-            return new PaymentResource($payment->load('discount'));
+            return response()->json([
+                'message' => 'Pagamento registrato con successo',
+                'data' => new PaymentResource($payment->load('discount'))
+            ], 201);
         });
     }
 
@@ -105,7 +110,7 @@ class PaymentController extends Controller
         $order = $payment->order;
 
         if ($order->status !== 'open') {
-            return response()->json(['message' => 'Non puoi eliminare pagamenti di un ordine già chiuso.'], 422);
+            return response()->json(['message' => 'Non puoi eliminare pagamenti di un ordine già chiuso.', 'data' => null], 422);
         }
 
         return DB::transaction(function () use ($payment, $order) {
@@ -117,7 +122,10 @@ class PaymentController extends Controller
 
             $payment->delete();
 
-            return response()->json(['message' => 'Pagamento stornato con successo.'], 200);
+            return response()->json([
+                'message' => 'Pagamento stornato con successo.',
+                'data' => null
+            ], 200);
         });
     }
 }

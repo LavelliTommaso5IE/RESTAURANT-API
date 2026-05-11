@@ -14,7 +14,10 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::with('dishes')->get();
-        return MenuResource::collection($menus);
+        return response()->json([
+            'message' => 'Lista menù recuperata con successo',
+            'data' => MenuResource::collection($menus)
+        ], 200);
     }
 
     public function store(StoreMenuRequest $request)
@@ -27,13 +30,19 @@ class MenuController extends Controller
 
         $menu->load('dishes');
 
-        return (new MenuResource($menu))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => 'Menù creato con successo',
+            'data' => new MenuResource($menu)
+        ], 201);
     }
 
     public function show(Menu $menu)
     {
         $menu->load('dishes');
-        return new MenuResource($menu);
+        return response()->json([
+            'message' => 'Dettaglio menù recuperato con successo',
+            'data' => new MenuResource($menu)
+        ], 200);
     }
 
     public function update(UpdateMenuRequest $request, Menu $menu)
@@ -46,12 +55,18 @@ class MenuController extends Controller
 
         $menu->load('dishes');
 
-        return new MenuResource($menu);
+        return response()->json([
+            'message' => 'Menù aggiornato con successo',
+            'data' => new MenuResource($menu)
+        ], 200);
     }
 
     public function destroy(Menu $menu)
     {
         $menu->delete();
-        return response()->json(["message" => "Menù eliminato"], 200);
+        return response()->json([
+            "message" => "Menù eliminato",
+            "data" => null
+        ], 200);
     }
 }

@@ -22,33 +22,50 @@ class ReservationController extends Controller
         $reservations = $query->orderBy('reservation_date', 'asc')
                               ->orderBy('reservation_time', 'asc')
                               ->get();
-                              
-        return ReservationResource::collection($reservations);
+        return response()->json([
+            'message' => 'Lista prenotazioni recuperata con successo',
+            'data' => ReservationResource::collection($reservations)
+        ], 200);
     }
 
     public function store(StoreReservationRequest $request)
     {
         $reservation = Reservation::create($request->validated());
+        // TODO: Salvare uno snapshot dei dati del cliente e del tavolo al momento della prenotazione
+        // in modo che lo storico mantenga i dati originali anche se cliente o tavolo vengono modificati.
+        
         $reservation->load(['customer', 'table']);
-        return (new ReservationResource($reservation))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => 'Prenotazione creata con successo',
+            'data' => new ReservationResource($reservation)
+        ], 201);
     }
 
     public function show(Reservation $reservation)
     {
         $reservation->load(['customer', 'table']);
-        return new ReservationResource($reservation);
+        return response()->json([
+            'message' => 'Dettaglio prenotazione recuperato con successo',
+            'data' => new ReservationResource($reservation)
+        ], 200);
     }
 
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
         $reservation->update($request->validated());
         $reservation->load(['customer', 'table']);
-        return new ReservationResource($reservation);
+        return response()->json([
+            'message' => 'Prenotazione aggiornata con successo',
+            'data' => new ReservationResource($reservation)
+        ], 200);
     }
 
     public function destroy(Reservation $reservation)
     {
         $reservation->delete();
-        return response()->json(["message" => "Prenotazione eliminata"], 200);
+        return response()->json([
+            "message" => "Prenotazione eliminata",
+            "data" => null
+        ], 200);
     }
 }

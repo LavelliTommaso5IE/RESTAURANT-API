@@ -16,7 +16,10 @@ class PublicMenuController extends Controller
                      ->with(['dishes.category'])
                      ->get();
                      
-        return MenuResource::collection($menus);
+        return response()->json([
+            'message' => 'Lista menù pubblici recuperata con successo',
+            'data' => MenuResource::collection($menus)
+        ], 200);
     }
 
     public function show(Menu $menu)
@@ -27,6 +30,9 @@ class PublicMenuController extends Controller
         }
 
         $menu->load(['dishes.category']);
-        return new MenuResource($menu);
+        return response()->json([
+            'message' => 'Dettaglio menù pubblico recuperato con successo',
+            'data' => new MenuResource($menu)
+        ], 200);
     }
 }

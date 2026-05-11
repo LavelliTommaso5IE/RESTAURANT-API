@@ -15,7 +15,10 @@ class DishController extends Controller
     {
         $dishes = Dish::with('category')->get();
 
-        return DishResource::collection($dishes);
+        return response()->json([
+            'message' => 'Lista piatti recuperata con successo',
+            'data' => DishResource::collection($dishes)
+        ], 200);
     }
 
     public function store(StoreDishRequest $request)
@@ -40,15 +43,19 @@ class DishController extends Controller
         // Load the category and products to include them in the response resource
         $dish->load(['category', 'products']);
 
-        return (new DishResource($dish))
-            ->response()
-            ->setStatusCode(201);
+        return response()->json([
+            'message' => 'Piatto creato con successo',
+            'data' => new DishResource($dish)
+        ], 201);
     }
 
     public function show(Dish $dish)
     {
         $dish->load(['category', 'products']);
-        return new DishResource($dish);
+        return response()->json([
+            'message' => 'Dettaglio piatto recuperato con successo',
+            'data' => new DishResource($dish)
+        ], 200);
     }
 
     public function update(UpdateDishRequest $request, Dish $dish)
@@ -69,13 +76,19 @@ class DishController extends Controller
         // Load the category and products to include them in the response resource
         $dish->load(['category', 'products']);
 
-        return new DishResource($dish);
+        return response()->json([
+            'message' => 'Piatto aggiornato con successo',
+            'data' => new DishResource($dish)
+        ], 200);
     }
 
     public function destroy(Dish $dish)
     {
         $dish->delete();
 
-        return response()->json(["message" => "Piatto eliminato"], 200);
+        return response()->json([
+            "message" => "Piatto eliminato",
+            "data" => null
+        ], 200);
     }
 }
