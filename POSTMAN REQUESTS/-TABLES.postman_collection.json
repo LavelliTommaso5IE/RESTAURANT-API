@@ -1,0 +1,279 @@
+{
+  "info": {
+    "_postman_id": "34be53ce-06ed-4816-8980-4944261f9108",
+    "name": "/TABLES",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL TABLES",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE NEW TABLE",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Tavolo 1\",\n    \"seats\": 2,\n    \"status\": \"free\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "EDIT TABLE",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Tavolo 1A\",\n    \"seats\": 6,\n    \"status\": \"reserved\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE TABLE",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "MERGE TABLES",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"parent_id\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/3/join",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "3",
+            "join"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SPLIT TABLES",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/3/separate",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "3",
+            "separate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GENERATE PIN",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/3/generate-pin",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "3",
+            "generate-pin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CLEAR TABLE",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/3/clear",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "3",
+            "clear"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC TABLE",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/tables/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "tables",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

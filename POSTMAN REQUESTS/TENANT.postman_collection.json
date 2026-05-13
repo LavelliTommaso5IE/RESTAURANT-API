@@ -1,0 +1,72 @@
+{
+  "info": {
+    "_postman_id": "ac1f4561-2dd8-42f4-86a7-fe0242dac642",
+    "name": "TENANT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "CREATE-TENANT",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Acme Corporation\",\r\n    \"description\": \"Leader mondiale in prodotti per catturare Road Runner\",\r\n    \"admin_name\": \"Mario\",\r\n    \"admin_surname\": \"Rossi\",\r\n    \"admin_email\": \"mario.rossi@acme.com\",\r\n    \"admin_password\": \"Password1!\",\r\n    \"admin_password_confirmation\": \"Password1!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/create-tenant",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "create-tenant"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CHECK TENANT EXISTENCE",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/check-tenant",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "check-tenant"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

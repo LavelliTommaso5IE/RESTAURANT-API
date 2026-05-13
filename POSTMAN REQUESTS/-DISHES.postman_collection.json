@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "2866c0b3-99e9-40e5-8712-03d8211cb03b",
+    "name": "/DISHES",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL DISHES",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/dishes",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "dishes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE NEW DISH",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Spaghetti alla Carbonara\",\n    \"description\": \"Pasta con guanciale, pecorino e pepe\",\n    \"price\": 12.00,\n    \"category_id\": 1,\n    \"products\": [\n        {\n            \"id\": 1,\n            \"quantity\": 0.1,\n            \"tolerance_percentage\": 5.0\n        },\n        {\n            \"id\": 2,\n            \"quantity\": 0.05,\n            \"tolerance_percentage\": 0.0\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/dishes",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "dishes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "EDIT DISH",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"price\": 7.50,\n    \"description\": \"Dolce tipico italiano con savoiardi artigianali\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/dishes/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "dishes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE DISH",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/dishes/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "dishes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC DISH",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/dishes/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "dishes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

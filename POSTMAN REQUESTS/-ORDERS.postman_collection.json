@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "77a973e2-f959-4722-ae90-f0765314859e",
+    "name": "/ORDERS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL ORDERS",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC ORDER",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE ORDER (OPEN TABLE)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"table_id\": 1,\n    \"notes\": \"Tavolo vicino alla finestra\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LINK CUSTOMER-ORDER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"customer_id\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders/1/customer",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders",
+            "1",
+            "customer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "APPLY DISCOUNT TO A SPECIFIC ORDER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"discount_code\": \"SUMMER5\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders/1/discount",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders",
+            "1",
+            "discount"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CLOSE ORDER (CLEAN TABLE)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders/1/close",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders",
+            "1",
+            "close"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REMOVE DISCOUNT FROM SPECIFIC ORDER",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/orders/1/discount",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "orders",
+            "1",
+            "discount"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

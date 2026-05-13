@@ -1,0 +1,67 @@
+{
+  "info": {
+    "_postman_id": "3278a78f-a677-4f0c-a8f6-e4ee4710fdf5",
+    "name": "PUBLIC",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL VISIBLE MENUS",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/public/menus",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "public",
+            "menus"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC MENU",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/public/menus/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "public",
+            "menus",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "info": {
+    "_postman_id": "4c084e3a-5a3e-4e39-9a72-9f5ad9dff496",
+    "name": "/PERMISSIONS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL PERMISSIONS",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"permission_ids\" : [4,5]\r\n}"
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/permissions",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "permissions"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

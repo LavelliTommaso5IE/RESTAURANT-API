@@ -1,0 +1,195 @@
+{
+  "info": {
+    "_postman_id": "d8d35cd6-1fa5-4c89-914f-d8bfce19091d",
+    "name": "/DISCOUNTS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "GET ALL DISCOUNTS",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC DISCOUNT",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET SPECIFIC DISCOUNT BY CODE",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts/code/TEST-SCONTO2026",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts",
+            "code",
+            "TEST-SCONTO2026"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE NEW DISCOUNT",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Gift Card Compleanno Mario\",\n    \"code\": \"SUMMER5\",\n    \"type\": \"percentage\", // Valori ammessi: percentage, fixed, gift_card\n    \"value\": 5,\n    \"min_order_value\": 0.00,\n    \"is_active\": true,\n    \"valid_until\": \"2026-12-31 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE DISCOUNT",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"value\": 30.00\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "(SOFT) DELETE A DISCOUNT",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/discounts/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "discounts",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

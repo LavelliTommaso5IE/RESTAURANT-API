@@ -1,0 +1,114 @@
+{
+  "info": {
+    "_postman_id": "486e8cf9-5d8a-4156-bd11-c9be36b1ba4d",
+    "name": "/PAYMENTS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43398299"
+  },
+  "item": [
+    {
+      "name": "CREATE PAYMENT",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"amount\": 7.8,\n    \"payment_method\": \"cash\", // Valori: cash, card\n    \"notes\": \"Pagato da Mario\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/payments/order/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "payments",
+            "order",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REVERT PAYMENT",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/payments/2",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "payments",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE PAYMENT WITH GIFT_CARD",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"amount\": 15,\n    \"payment_method\": \"gift_card\",\n    \"discount_code\": \"MARIO\",\n    \"notes\": \"Uso parziale del buono\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://acme-corporation.localhost:8000/api/payments/order/1",
+          "protocol": "http",
+          "host": [
+            "acme-corporation",
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "payments",
+            "order",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

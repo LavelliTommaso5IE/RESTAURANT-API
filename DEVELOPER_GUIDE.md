@@ -20,7 +20,7 @@ Invece, al login il backend rilascia due cookie `HttpOnly`:
 
 ### Standardizzazione Risposte
 Ogni endpoint dell'applicazione (salvo eccezioni pubbliche minori) restituisce una risposta JSON strutturata sistematicamente con questo formato:
-```json
+```jsonc
 {
   "message": "Descrizione testuale dell'operazione",
   "data": { ... } // L'oggetto o array contenente i dati veri e propri
@@ -59,9 +59,13 @@ Se stai configurando il progetto partendo da zero, segui questi passaggi:
 
 ---
 
+
 ## 3. 📚 Reference Completo Endpoint
 
+> 💡 **Nota Postman:** Tutti gli esempi pratici (inclusi i payload completi) riportati in questa documentazione sono disponibili ed eseguibili direttamente tramite le collezioni salvate nella cartella `POSTMAN REQUESTS` presente nella root del progetto.
+
 Questa sezione elenca tutti gli endpoint disponibili. Per aggiornamenti (`PUT`) o creazioni (`POST`), ricorda di impostare l'header `Content-Type: application/json`.
+
 
 ### 🌐 3.1. Livello Centrale e Accesso (Auth)
 Queste rotte gestiscono l'autenticazione all'interno del tenant.
@@ -69,19 +73,25 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 #### Crea Tenant (Scope: Database Centrale)
 **Endpoint:** `POST /api/create-tenant`
 **Body:**
-```json
+```jsonc
 {
-  "id": "ristorante1",
-  "domain": "ristorante1.localhost"
+    "name": "Acme Corporation",
+    "description": "Leader mondiale in prodotti per catturare Road Runner", // (Facoltativo)
+    "admin_name": "Mario",
+    "admin_surname": "Rossi",
+    "admin_email": "mario.rossi@acme.com",
+    "admin_password": "Password1!",
+    "admin_password_confirmation": "Password1!"
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Tenant creato con successo",
   "data": {
-    "id": "ristorante1",
-    "domain": "ristorante1.localhost"
+    "id": "acme-corporation",
+    "domain": "acme-corporation.localhost",
+    "name": "Acme Corporation"
   }
 }
 ```
@@ -89,11 +99,11 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 #### Verifica Tenant
 **Endpoint:** `GET /api/check-tenant`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Tenant trovato",
   "data": {
-    "id": "ristorante1"
+    "id": "acme-corporation"
   }
 }
 ```
@@ -101,20 +111,20 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 #### Login Staff
 **Endpoint:** `POST /api/login`
 **Body:**
-```json
+```jsonc
 {
-  "email": "admin@example.com",
-  "password": "password123"
+    "email": "mario.rossi@acme.com",
+    "password": "Password1!"
 }
 ```
 **Risposta (200 OK):**
 *(I token vengono iniettati nei Cookie HttpOnly `Authorization` e `Refresh`)*
-```json
+```jsonc
 {
   "message": "Login effettuato con successo",
   "data": {
     "id": 1,
-    "name": "Admin",
+    "name": "Mario",
     "role": "Amministratore"
   }
 }
@@ -124,13 +134,13 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/me`
 **Permesso:** *Auth JWT*
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Dettagli utente recuperati",
   "data": {
     "id": 1,
     "name": "Mario Rossi",
-    "email": "mario@example.com",
+    "email": "mario.rossi@acme.com",
     "role": {
       "id": 1,
       "name": "Amministratore"
@@ -145,7 +155,7 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** *Auth JWT*
 **Risposta (200 OK):**
 *(I cookie HttpOnly vengono invalidati e rimossi dal browser)*
-```json
+```jsonc
 {
   "message": "Logout effettuato con successo",
   "data": null
@@ -160,15 +170,15 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/users`
 **Permesso:** `view_users`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista utenti recuperata",
   "data": [
     {
-      "id": 1,
-      "name": "Luigi",
-      "surname": "Verdi",
-      "email": "luigi@example.com",
+      "id": 2,
+      "name": "Gianni",
+      "surname": "Bianchi",
+      "email": "gianni.bianchi@acme.com",
       "role": {
         "id": 2,
         "name": "Cameriere"
@@ -182,28 +192,26 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/users`
 **Permesso:** `edit_users`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Anna",
-  "surname": "Neri",
-  "email": "anna@example.com",
-  "password": "SecretPassword1!",
-  "role_id": 2
+    "name": "Gianni",
+    "surname": "Bianchi",
+    "email": "gianni.bianchi@acme.com",
+    "password": "PasswordSicura123!",
+    "password_confirmation": "PasswordSicura123!",
+    "role_id": 2 // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Utente creato con successo",
   "data": {
     "id": 2,
-    "name": "Anna",
-    "surname": "Neri",
-    "email": "anna@example.com",
-    "role": {
-      "id": 2,
-      "name": "Cameriere"
-    }
+    "name": "Gianni",
+    "surname": "Bianchi",
+    "email": "gianni.bianchi@acme.com",
+    "role": null
   }
 }
 ```
@@ -212,19 +220,19 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `PUT /api/users/{id}`
 **Permesso:** `edit_users`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Anna Maria"
+    "name" : "Marco"
 }
 ```
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Utente aggiornato con successo",
   "data": {
-    "id": 2,
-    "name": "Anna Maria",
-    "surname": "Neri"
+    "id": 4,
+    "name": "Marco",
+    "surname": "Bianchi"
   }
 }
 ```
@@ -233,7 +241,7 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `DELETE /api/users/{id}`
 **Permesso:** `edit_users`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Utente eliminato con successo",
   "data": null
@@ -244,17 +252,13 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/roles`
 **Permesso:** `view_roles`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista ruoli recuperata",
   "data": [
     {
       "id": 1,
       "name": "Amministratore"
-    },
-    {
-      "id": 2,
-      "name": "Cameriere"
     }
   ]
 }
@@ -264,18 +268,42 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/roles`
 **Permesso:** `edit_roles`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Cuoco"
+    "name" : "Ruolo nome",
+    "description" : "descrizione ruolo"
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Ruolo creato con successo",
   "data": {
     "id": 3,
-    "name": "Cuoco"
+    "name": "Ruolo nome",
+    "description": "descrizione ruolo"
+  }
+}
+```
+
+#### Modifica Ruolo
+**Endpoint:** `PUT /api/roles/{id}`
+**Permesso:** `edit_roles`
+**Body:**
+```jsonc
+{
+    "name" : "RUOLO_NEW",
+    "description" : "ruolo aggiornato descrizione"
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Ruolo aggiornato con successo",
+  "data": {
+    "id": 3,
+    "name": "RUOLO_NEW",
+    "description": "ruolo aggiornato descrizione"
   }
 }
 ```
@@ -284,22 +312,21 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `PUT /api/roles/{id}/permissions`
 **Permesso:** `edit_roles`
 **Body:**
-```json
+```jsonc
 {
-  "permissions": [1, 2, 5, 8]
+    "permission_ids" : [4,5]
 }
 ```
-*L'array contiene gli ID numerici dei permessi dalla tabella permissions.*
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Permessi aggiornati con successo",
   "data": {
-    "id": 3,
-    "name": "Cuoco",
+    "id": 2,
+    "name": "Cameriere",
     "permissions": [
-      { "id": 1, "name": "view_orders" },
-      { "id": 2, "name": "edit_orders" }
+      { "id": 4, "name": "edit_orders" },
+      { "id": 5, "name": "view_tables" }
     ]
   }
 }
@@ -309,7 +336,7 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/permissions`
 **Permesso:** `view_permissions`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista permessi recuperata",
   "data": [
@@ -330,14 +357,14 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/categories`
 **Permesso:** `view_categories`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista categorie recuperata",
   "data": [
     {
       "id": 1,
-      "name": "Primi Piatti",
-      "description": "Pasta e risotti"
+      "name": "categoria_test",
+      "description": null
     }
   ]
 }
@@ -347,23 +374,16 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/categories/{id}`
 **Permesso:** `view_categories`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Dettaglio categoria recuperato",
   "data": {
     "category": {
       "id": 1,
-      "name": "Primi Piatti",
-      "description": "Pasta e risotti"
+      "name": "categoria_test",
+      "description": null
     },
-    "dishes": [
-      {
-        "id": 10,
-        "name": "Spaghetti alla Carbonara",
-        "price": 12.00,
-        "is_orderable": true
-      }
-    ]
+    "dishes": []
   }
 }
 ```
@@ -372,20 +392,38 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/categories`
 **Permesso:** `edit_categories`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Pizze",
-  "description": "Pizze cotte nel forno a legna"
+    "name": "categoria_test"
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Categoria creata con successo",
   "data": {
-    "id": 2,
-    "name": "Pizze",
-    "description": "Pizze cotte nel forno a legna"
+    "id": 1,
+    "name": "categoria_test"
+  }
+}
+```
+
+#### Modifica Categoria
+**Endpoint:** `PUT /api/categories/{id}`
+**Permesso:** `edit_categories`
+**Body:**
+```jsonc
+{
+    "name": "categoria_test_edited"
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Categoria aggiornata con successo",
+  "data": {
+    "id": 1,
+    "name": "categoria_test_edited"
   }
 }
 ```
@@ -394,12 +432,12 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/dishes`
 **Permesso:** `view_dishes`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista piatti recuperata",
   "data": [
     {
-      "id": 10,
+      "id": 1,
       "name": "Spaghetti alla Carbonara",
       "price": 12.00,
       "category": {
@@ -416,25 +454,62 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/dishes`
 **Permesso:** `edit_dishes`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Pizza Margherita",
-  "description": "Pomodoro, mozzarella, basilico",
-  "price": 8.50,
-  "category_id": 2,
-  "is_orderable": true
+    "name": "Spaghetti alla Carbonara",
+    "description": "Pasta con guanciale, pecorino e pepe", // (Facoltativo)
+    "price": 12.00,
+    "category_id": 1,
+    "is_orderable": true, // (Facoltativo)
+    "products": [ // (Facoltativo, array materie prime)
+        {
+            "id": 1,
+            "quantity": 0.1,
+            "tolerance_percentage": 5.0 // (Facoltativo)
+        },
+        {
+            "id": 2,
+            "quantity": 0.05,
+            "tolerance_percentage": 0.0 // (Facoltativo)
+        }
+    ]
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Piatto creato con successo",
   "data": {
-    "id": 11,
-    "name": "Pizza Margherita",
-    "price": 8.50,
-    "category_id": 2,
-    "is_orderable": true
+    "id": 1,
+    "name": "Spaghetti alla Carbonara",
+    "price": 12.00,
+    "category_id": 1,
+    "is_orderable": true, // (Facoltativo)
+    "is_orderable": true,
+    "products": [ // (Facoltativo, array materie prime) ... ]
+  }
+}
+```
+
+#### Modifica Piatto
+**Endpoint:** `PUT /api/dishes/{id}`
+**Permesso:** `edit_dishes`
+**Body:**
+```jsonc
+{
+    "price": 7.50,
+    "description": "Dolce tipico italiano con savoiardi artigianali"
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Piatto aggiornato con successo",
+  "data": {
+    "id": 1,
+    "name": "Tiramisù",
+    "price": 7.50,
+    "description": "Dolce tipico italiano con savoiardi artigianali"
   }
 }
 ```
@@ -443,17 +518,17 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/menus`
 **Permesso:** `edit_menus`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Menù Cena",
-  "description": "Menù serale del weekend",
-  "is_active": true,
-  "dishes": [10, 11] 
+    "name": "Menù Cena",
+    "description": "I nostri piatti classici per la cena", // (Facoltativo)
+    "cover": "https://esempio.com/img/cena.jpg", // (Facoltativo)
+    "is_active": true,
+    "dishes": [1] // (Facoltativo)
 }
 ```
-*L'array `dishes` contiene gli ID dei piatti da includere nel menù.*
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Menù creato con successo",
   "data": {
@@ -461,8 +536,32 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
     "name": "Menù Cena",
     "is_active": true,
     "dishes": [
-      { "id": 10, "name": "Spaghetti alla Carbonara" },
-      { "id": 11, "name": "Pizza Margherita" }
+      { "id": 1, "name": "Spaghetti alla Carbonara" }
+    ]
+  }
+}
+```
+
+#### Modifica Menù
+**Endpoint:** `PUT /api/menus/{id}`
+**Permesso:** `edit_menus`
+**Body:**
+```jsonc
+{
+    "is_active": true,
+    "dishes": [1, 2] // (Facoltativo)
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Menù aggiornato con successo",
+  "data": {
+    "id": 2,
+    "is_active": true,
+    "dishes": [
+      { "id": 1, "name": "Spaghetti alla Carbonara" },
+      { "id": 2, "name": "Pizza" }
     ]
   }
 }
@@ -473,7 +572,7 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** *Nessuno (Pubblico)*
 **Risposta (200 OK):**
 *Ritorna solo i menù attivi e i piatti con `is_orderable = true`*
-```json
+```jsonc
 {
   "message": "Menu pubblici recuperati",
   "data": [
@@ -494,16 +593,16 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/products`
 **Permesso:** `view_products`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Lista prodotti recuperata",
   "data": [
     {
       "id": 1,
-      "name": "Farina 00",
+      "name": "Guanciale",
       "unit": "kg",
-      "quantity_in_stock": 50.5,
-      "alert_threshold": 10.0
+      "quantity_in_stock": 5.5,
+      "alert_threshold": 0.0
     }
   ]
 }
@@ -513,24 +612,44 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/products`
 **Permesso:** `edit_products`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Pomodoro Pelato",
-  "unit": "kg",
-  "quantity_in_stock": 30.0,
-  "alert_threshold": 5.0
+    "name": "Guanciale",
+    "description": "Guanciale stagionato per Carbonara", // (Facoltativo)
+    "quantity": 5.5,
+    "unit": "kg"
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Prodotto creato con successo",
   "data": {
-    "id": 2,
-    "name": "Pomodoro Pelato",
+    "id": 1,
+    "name": "Guanciale",
     "unit": "kg",
-    "quantity_in_stock": 30.0,
-    "alert_threshold": 5.0
+    "quantity_in_stock": 5.5
+  }
+}
+```
+
+#### Modifica Prodotto
+**Endpoint:** `PUT /api/products/{id}`
+**Permesso:** `edit_products`
+**Body:**
+```jsonc
+{
+    "quantity": 10.0
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Prodotto aggiornato con successo",
+  "data": {
+    "id": 1,
+    "name": "Guanciale",
+    "quantity_in_stock": 10.0
   }
 }
 ```
@@ -543,15 +662,15 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/tables`
 **Permesso:** `view_tables`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Mappa tavoli recuperata",
   "data": [
     {
       "id": 1,
       "name": "Tavolo 1",
-      "seats": 4,
-      "status": "free",
+      "seats": 2,
+      "status": "free" // (Facoltativo),
       "pin": null,
       "parent_id": null,
       "children": []
@@ -564,22 +683,46 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/tables`
 **Permesso:** `edit_tables`
 **Body:**
-```json
+```jsonc
 {
-  "name": "Tavolo 2",
-  "seats": 2,
-  "status": "free"
+    "name": "Tavolo 1",
+    "seats": 2,
+    "status": "free" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Tavolo creato con successo",
   "data": {
-    "id": 2,
-    "name": "Tavolo 2",
+    "id": 1,
+    "name": "Tavolo 1",
     "seats": 2,
-    "status": "free"
+    "status": "free" // (Facoltativo)
+  }
+}
+```
+
+#### Modifica Tavolo
+**Endpoint:** `PUT /api/tables/{id}`
+**Permesso:** `edit_tables`
+**Body:**
+```jsonc
+{
+    "name": "Tavolo 1A",
+    "seats": 6,
+    "status": "reserved"
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Tavolo aggiornato con successo",
+  "data": {
+    "id": 2,
+    "name": "Tavolo 1A",
+    "seats": 6,
+    "status": "reserved"
   }
 }
 ```
@@ -587,24 +730,23 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 #### Accorpa Tavoli
 **Endpoint:** `POST /api/tables/{id}/join`
 **Permesso:** `edit_tables`
-**Descrizione:** Accorpa il tavolo `child_id` (Tavolo 2) dentro il tavolo principale specificato nell'URL `{id}` (Tavolo 1).
+**Descrizione:** Accorpa il tavolo `child_id` (Tavolo 2) dentro il tavolo principale specificato nell'URL `{id}` (Tavolo 3).
 **Body:**
-```json
+```jsonc
 {
-  "child_id": 2
+    "parent_id": 2
 }
 ```
+*(Nota: L'ID del tavolo figlio va nell'URL, il parent_id nel body, in base alla logica del controller)*
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Tavoli accorpati con successo",
   "data": {
-    "id": 1,
-    "name": "Tavolo 1",
+    "id": 2,
     "children": [
       {
-        "id": 2,
-        "name": "Tavolo 2"
+        "id": 3
       }
     ]
   }
@@ -616,11 +758,11 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** `edit_tables`
 **Body:** `{}` (Vuoto)
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "PIN generato con successo",
   "data": {
-    "id": 1,
+    "id": 3,
     "pin": "8542"
   }
 }
@@ -632,12 +774,12 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Descrizione:** Libera lo stato del tavolo a `free`, scollega eventuali ordini aperti e distrugge il PIN.
 **Body:** `{}` (Vuoto)
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Tavolo liberato con successo",
   "data": {
-    "id": 1,
-    "status": "free",
+    "id": 3,
+    "status": "free" // (Facoltativo),
     "pin": null
   }
 }
@@ -651,23 +793,26 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/customers`
 **Permesso:** `edit_customers`
 **Body:**
-```json
+```jsonc
 {
-  "first_name": "Giulia",
-  "last_name": "Bianchi",
-  "phone": "3331234567",
-  "email": "giulia@example.com"
+    "first_name": "Luca",
+    "last_name": "Bianchi",
+    "phone": "+39 333 1234567", // (Facoltativo)
+    "email": "luca.bianchi@email.it", // (Facoltativo)
+    "vat_number": "IT12345678901", // (Facoltativo)
+    "tax_code": "AAABBB80A01H501U", // (Facoltativo)
+    "address": "Via Roma 66, Milano", // (Facoltativo)
+    "notes": "Cliente abituale, preferisce tavoli all'aperto." // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Cliente creato con successo",
   "data": {
     "id": 1,
-    "first_name": "Giulia",
-    "last_name": "Bianchi",
-    "phone": "3331234567"
+    "first_name": "Luca",
+    "last_name": "Bianchi"
   }
 }
 ```
@@ -676,24 +821,24 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/reservations`
 **Permesso:** `edit_reservations`
 **Body:**
-```json
+```jsonc
 {
-  "reservation_date": "2026-06-15",
-  "reservation_time": "20:30:00",
-  "people_count": 4,
-  "customer_id": 1,
-  "table_id": 1,
-  "status": "confirmed",
-  "notes": "Richiesto seggiolone"
+    "customer_id": 1,
+    "table_id": 2,
+    "reservation_date": "2026-05-15",
+    "reservation_time": "20:30",
+    "people_count": 4,
+    "status": "confirmed", // (Facoltativo)
+    "notes": "Richiesto seggiolone" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Prenotazione creata con successo",
   "data": {
-    "id": 10,
-    "reservation_date": "2026-06-15",
+    "id": 1,
+    "reservation_date": "2026-05-15",
     "reservation_time": "20:30:00",
     "status": "confirmed"
   }
@@ -708,22 +853,43 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/orders`
 **Permesso:** `edit_orders`
 **Body:**
-```json
+```jsonc
 {
-  "table_id": 1,
-  "customer_id": 1,
-  "notes": "Cliente abituale"
+    "table_id": 1,
+    "customer_id": 1, // (Facoltativo)
+    "notes": "Tavolo vicino alla finestra" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Ordine creato con successo",
   "data": {
-    "id": 100,
+    "id": 1,
     "table_id": 1,
+    "customer_id": 1, // (Facoltativo)
     "status": "open",
     "total_amount": 0.00
+  }
+}
+```
+
+#### Associa Cliente a Ordine
+**Endpoint:** `POST /api/orders/{id}/customer`
+**Permesso:** `edit_orders`
+**Body:**
+```jsonc
+{
+    "customer_id": 1
+}
+```
+**Risposta (200 OK):**
+```jsonc
+{
+  "message": "Cliente associato con successo",
+  "data": {
+    "id": 1,
+    "customer_id": 1
   }
 }
 ```
@@ -732,11 +898,11 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `GET /api/orders/{id}`
 **Permesso:** `view_orders`
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Dettaglio ordine recuperato",
   "data": {
-    "id": 100,
+    "id": 1,
     "status": "open",
     "total_amount": 20.50,
     "discount_amount": 0.00,
@@ -745,12 +911,11 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
     "remaining_amount": 20.50,
     "items": [
       {
-        "id": 50,
-        "dish_name": "Pizza Margherita",
+        "id": 1,
+        "dish_name": "Spaghetti alla Carbonara",
         "quantity": 1,
-        "unit_price": 8.50,
-        "status": "pending",
-        "notes": "Ben cotta"
+        "unit_price": 12.00,
+        "status": "pending"
       }
     ],
     "payments": []
@@ -763,24 +928,24 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** `edit_orders`
 **Descrizione:** Inserisce un piatto in un ordine e salva uno **snapshot** del prezzo.
 **Body:**
-```json
+```jsonc
 {
-  "dish_id": 11,
-  "quantity": 2,
-  "notes": "Ben cotta"
+    "dish_id": 1,
+    "quantity": 2,
+    "notes": "Senza pepe" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Elemento aggiunto all'ordine con successo",
   "data": {
-    "id": 51,
-    "dish_id": 11,
+    "id": 1,
+    "dish_id": 1,
     "quantity": 2,
-    "unit_price": 8.50,
+    "unit_price": 12.00,
     "status": "pending",
-    "notes": "Ben cotta"
+    "notes": "Senza pepe" // (Facoltativo)
   }
 }
 ```
@@ -790,18 +955,18 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** `edit_comande`
 **Descrizione:** Stati possibili: `pending`, `preparing`, `ready`, `served`.
 **Body:**
-```json
+```jsonc
 {
-  "status": "preparing"
+    "status": "ready"
 }
 ```
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Stato elemento ordine aggiornato con successo",
   "data": {
-    "id": 51,
-    "status": "preparing"
+    "id": 1,
+    "status": "ready"
   }
 }
 ```
@@ -812,11 +977,11 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Descrizione:** Cambia lo stato dell'ordine in `closed` e libera il tavolo (`free`) ad esso collegato.
 **Body:** `{}` (Vuoto)
 **Risposta (200 OK):**
-```json
+```jsonc
 {
   "message": "Ordine chiuso con successo",
   "data": {
-    "id": 100,
+    "id": 1,
     "status": "closed"
   }
 }
@@ -830,42 +995,28 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Endpoint:** `POST /api/discounts`
 **Permesso:** `edit_discounts`
 **Descrizione:** Può creare sconti in percentuale (`percentage`), importo fisso (`fixed`) o carte regalo (`gift_card`). Per le `gift_card` il codice viene auto-generato a 12 cifre se non fornito.
-**Body (Gift Card):**
-```json
+**Body:**
+```jsonc
 {
-  "name": "Gift Card 50 Euro",
-  "type": "gift_card",
-  "value": 50.00,
-  "is_active": true
+    "name": "Gift Card Compleanno Mario",
+    "code": "SUMMER5", // (Facoltativo, autogenerato se omesso)
+    "type": "percentage",
+    "value": 5,
+    "min_order_value": 0.00, // (Facoltativo)
+    "is_active": true,
+    "valid_until": "2026-12-31 23:59:59" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Sconto creato con successo",
   "data": {
-    "id": 5,
-    "name": "Gift Card 50 Euro",
-    "type": "gift_card",
-    "value": 50.00,
-    "current_balance": 50.00,
-    "code": "X9F2M1L0P5K8",
-    "is_active": true
-  }
-}
-```
-
-#### Verifica Codice Sconto / Gift Card
-**Endpoint:** `GET /api/discounts/code/{code}`
-**Permesso:** `view_discounts`
-**Risposta (200 OK):**
-```json
-{
-  "message": "Sconto recuperato con successo",
-  "data": {
-    "id": 5,
-    "name": "Gift Card 50 Euro",
-    "current_balance": 50.00,
+    "id": 1,
+    "name": "Gift Card Compleanno Mario",
+    "type": "percentage",
+    "value": 5.00,
+    "code": "SUMMER5", // (Facoltativo, autogenerato se omesso)
     "is_active": true
   }
 }
@@ -876,27 +1027,29 @@ Queste rotte gestiscono l'autenticazione all'interno del tenant.
 **Permesso:** `edit_payments`
 **Descrizione:** Genera la transazione e riduce il conto da pagare `remaining_amount`. **Non consente di pagare più del saldo residuo (Overpayment)**.
 **Body (Pagamento Standard):**
-```json
+```jsonc
 {
-  "amount": 20.00,
-  "payment_method": "cash"
+    "amount": 7.8,
+    "payment_method": "cash",
+    "notes": "Pagato da Mario" // (Facoltativo)
 }
 ```
 **Body (Pagamento con Gift Card):**
-```json
+```jsonc
 {
-  "amount": 20.00,
-  "payment_method": "gift_card",
-  "discount_code": "X9F2M1L0P5K8"
+    "amount": 15,
+    "payment_method": "gift_card",
+    "discount_code": "MARIO",
+    "notes": "Uso parziale del buono" // (Facoltativo)
 }
 ```
 **Risposta (201 Created):**
-```json
+```jsonc
 {
   "message": "Pagamento registrato con successo",
   "data": {
-    "id": 20,
-    "amount": 20.00,
+    "id": 2,
+    "amount": 15.00,
     "payment_method": "gift_card",
     "discount_id": 5
   }
