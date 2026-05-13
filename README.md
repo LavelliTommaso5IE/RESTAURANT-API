@@ -1,59 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🍽️ ANH Restaurant - API Backend
+### *Il tuo ristorante a portata di mano*  
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Autore:** Lavelli Tommaso  
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Descrizione
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**ANH Restaurant** è un’applicazione gestionale per **ristoranti, bar e pizzerie**, progettata per semplificare e velocizzare ogni aspetto del servizio.  
+Questo repository contiene il **Backend API SaaS (Multi-Tenant)** che permette di gestire in completo isolamento logico i **tavoli, le ordinazioni, i menù e i conti** per diversi ristoranti. Offre logiche avanzate per **calcolare automaticamente i totali**, **dividere i conti (split-bill)**, applicare **Gift Card e Sconti**, ed elaborare le comande tra Sala e Cucina.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+> 📚 **Sviluppatori**: Consulta la guida tecnica completa [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) per scoprire come installare il progetto e consultare la documentazione di tutti gli oltre 60 endpoint RESTful disponibili.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 👥 Ruoli e Permessi Gestiti dall'API
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Il sistema implementa un completo sistema RBAC (Role-Based Access Control) tramite JWT. I permessi sono dinamicamente assegnabili ai vari ruoli:
 
-## Laravel Sponsors
+### 🧑‍💼 Amministratore (Manager)
+**Permessi Base:** Completi  
+**Funzionalità Esposte:**
+- Gestione utenti e ruoli (RBAC).
+- Configurazione e modifica del magazzino e del menù.
+- Gestione della mappa e configurazione dei tavoli.
+- Impostazione di Gift Card, Sconti e Coupon.
+- Accesso ai log, andamenti economici storici e controllo dello stock.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🧑‍🍽️ Cameriere / Operatore di Sala
+**Permessi Base:** Limitati alla gestione operativa  
+**Funzionalità Esposte:**
+- Visualizzazione mappa tavoli e stato (libero/occupato).
+- Creazione, modifica e annullamento ordinazioni.
+- Aggiunta note alle singole comande (es. varianti piatto).
+- Invio comande e notifica a cucina/bar.
+- Accorpamento tavoli o separazione per gruppi numerosi.
+- Generazione PIN temporaneo del tavolo (per abilitare il self-ordering).
+- Richiesta scontrino/conto per il cliente.
 
-### Premium Partners
+### 👨‍🍳 Personale di Cucina / Bar (KDS)
+**Permessi Base:** Sola visualizzazione ordini e aggiornamento comande  
+**Funzionalità Esposte:**
+- Interrogazione real-time delle comande in attesa (Kitchen Display System).
+- Aggiornamento stato di preparazione (es. *In preparazione*, *Pronto*, *Servito*).
+- Gestione flussi per smaltimento rapido delle code in cucina.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 💰 Cassiere
+**Permessi Base:** Gestione conti e pagamenti  
+**Funzionalità Esposte:**
+- Accesso a tutti gli ordini aperti.
+- Split-bill parziale o pagamenti totali.
+- Controllo validità coupon e addebito automatico su Gift Card ricaricabili.
+- Chiusura dell'ordine con svuotamento e pulizia virtuale del tavolo associato.
 
-## Contributing
+### 📱 Cliente (Self-Ordering Pubblico)
+**Accesso:** Tramite **QR Code** al tavolo  
+**Funzionalità Esposte (Endpoint senza JWT Auth):**
+- Consultazione del menù digitale aggiornato in tempo reale (solo piatti disponibili/ordinabili).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🎯 Target
+**ANH Restaurant** è un prodotto B2B e B2C pensato per:  
+- Proprietari e gestori di ristoranti, pizzerie, bar e bistrot.
+- Team di sala per migliorare i tempi di servizio.
+- Staff di cucina per digitalizzare le classiche comande di carta.
+- Responsabili di cassa per evitare colli di bottiglia durante i pagamenti di gruppo.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## ⚖️ Competitors
+- TheFork Manager  
+- iPratico POS  
+- Scloby  
+- Tilby  
+- Ristomanager  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 💻 Stack Tecnologico (Backend)
+- **Framework:** Laravel 11 (PHP 8.2+)  
+- **Architettura:** REST API Multi-Tenant (SaaS) con `stancl/tenancy`
+- **Autenticazione:** JWT Custom con Cookie HttpOnly (Anti-XSS)
+- **Database:** MySQL / SQLite
+- **Testing:** PHPUnit (Suite di test mock/stubbed)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🌐 Link Utili
+👉 **App Pubblica (Demo):** [anh-restaurant.alpinenode.it](https://anh-restaurant.alpinenode.it)  
+🎨 **Mockup UI Frontend:** [my-new-web-project.lovable.app](https://my-new-web-project.lovable.app/)
+
+---
+
+## 📜 Licenza
+Questo progetto è di proprietà di **Lavelli Tommaso**.  
+Tutti i diritti riservati.  
